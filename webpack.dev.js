@@ -32,7 +32,7 @@ module.exports = merge(common, {
     ]
   },
   devServer: {
-    publicPath: '/dist',
+    contentBase: path.join(__dirname, 'dist'),
     proxy: {
       '/api': 'http://localhost:3000'
     }
