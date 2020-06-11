@@ -102,3 +102,13 @@ dist
 
 # TernJS port file
 .tern-port
+
+# When we have test later
+__test__
+
+# ESLint RC file
+.eslintrc
+
+# Package.json file
+package.json
+
