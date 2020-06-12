@@ -6,7 +6,7 @@
   "scripts": {
     "start": "cross-env NODE_ENV=development concurrently \"nodemon server/server.js\" \"webpack-dev-server --config webpack.dev.js --open\"",
     "build": "webpack --env.NODE_ENV=production --config webpack.prod.js",
-    "lint": "eslint --fix . && echo 'Lint complete.'"
+    "lint": "eslint --fix . && echo 'Lint complete.'",
   },
   "repository": {
     "type": "git",

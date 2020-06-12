@@ -8,7 +8,8 @@ module.exports = merge(common, {
   entry: './client/index.js',
   output: {
     filename: "[name].[contentHash]-bundle.js",
-    path: path.resolve(__dirname, "dist")
+    path: path.resolve(__dirname, "dist"),
+    publicPath: '/',
   },
   plugins: [
     new HtmlWebpackPlugin({
@@ -17,9 +18,9 @@ module.exports = merge(common, {
   ],
   module: {
     rules: [
-      { 
-        test: /\.css$/, 
-        use: ['style-loader', 'css-loader'] 
+      {
+        test: /\.css$/,
+        use: ['style-loader', 'css-loader']
       },
       {
         test: /\.scss$/,
