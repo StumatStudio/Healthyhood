@@ -8,7 +8,7 @@ module.exports = merge(common, {
   entry: './client/index.js',
   output: {
     filename: "[name].[contentHash]-bundle.js",
-    path: path.resolve(__dirname, "dist")
+    path: path.resolve(__dirname, "dist"),
   },
   plugins: [
     new HtmlWebpackPlugin({
@@ -32,7 +32,7 @@ module.exports = merge(common, {
     ]
   },
   devServer: {
-    contentBase: path.join(__dirname, 'dist'),
+    publicPath: '/',
     proxy: {
       '/api': 'http://localhost:3000'
     }
