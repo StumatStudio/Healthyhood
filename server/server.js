@@ -10,12 +10,12 @@ app.use(express.urlencoded({ extended: true }));
 // serve the static files and main app
 // if (process.env.NODE_ENV === 'production'
 //   || process.env.NODE_ENV === 'development') {
-  // statically serve everything in the build folder on the route '/build'
-  app.use('/dist', express.static(path.join(__dirname, '../dist')));
-  // serve index.html on the route '/'
-  app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, '../client/index.html'));
-  });
+// statically serve everything in the build folder on the route '/build'
+app.use('/dist', express.static(path.join(__dirname, '../dist')));
+// serve index.html on the route '/'
+app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname, '../dist/index.html'));
+});
 // }
 // default error handler
 app.use((err, req, res, next) => {
