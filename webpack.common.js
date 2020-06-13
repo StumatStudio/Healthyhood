@@ -1,26 +1,26 @@
-const path = require("path");
-const HtmlWebpackPlugin = require("html-webpack-plugin");
+const path = require('path');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
   entry: {
-    main: "./client/index.js",
+    main: './client/index.js',
     // vendor: "./client/vendor.js"
   },
   module: {
     rules: [
       {
         test: /\.html$/,
-        use: ["html-loader"]
+        use: ['html-loader'],
       },
       {
         test: /\.(svg|png|jpg|gif)$/,
         use: {
-          loader: "file-loader",
+          loader: 'file-loader',
           options: {
-            name: "[name]-[hash].[ext]",
-            outputPath: "imgs"
-          }
-        }
+            name: '[name]-[hash].[ext]',
+            outputPath: 'imgs',
+          },
+        },
       },
       {
         test: /\.jsx?/,
@@ -32,7 +32,6 @@ module.exports = {
           },
         },
       },
-      
-    ]
-  }
+    ],
+  },
 };
