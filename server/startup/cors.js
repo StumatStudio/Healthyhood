@@ -11,4 +11,4 @@ module.exports = function (app) {
   };
   app.options('*', cors(corsOptions));
   app.use(cors(corsOptions));
-}
+};

@@ -19,5 +19,5 @@ module.exports = () => {
     console.log(ex.message);
     // console.log(ex);
     process.exit(1);
-  })
-}
+  });
+};

@@ -9,7 +9,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // Startup files
-require('./startup/logging');
+require('./startup/logging')();
 require('./startup/cors')(app);
 require('./startup/routes')(app);
 

@@ -24,7 +24,5 @@ module.exports = app => {
   }
 
   // Catch all
-  app.use('*', (req, res) => {
-    res.sendStatus(404);
-  });
+  app.use('*', (req, res) => res.sendStatus(404));
 };
