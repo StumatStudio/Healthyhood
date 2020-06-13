@@ -45,7 +45,7 @@ export default mapReducer;
 
 // Action Generators
 const { apiCallRequested } = apiActions;
-const mapUrl = 'whateverBackendNeeds'
+const mapUrl = 'whateverBackendNeeds';
 
 export const getMapData = () =>
   apiCallRequested({
