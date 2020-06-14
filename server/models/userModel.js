@@ -11,18 +11,6 @@ const userSchema = new Schema(
   { collection: 'users' }
 );
 
-// We only need to connect to the DB once, so perhaps move
-// this to a separate file, perhaps server.js
-mongoose.set('useCreateIndex', true);
-mongoose
-  .connect(process.env.MONGO_URI, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-    dbName: 'healthyhood',
-  })
-  .then(() => console.log('Connected to Mongo DB: healthyhood'))
-  .catch(err => console.log(err));
-
 userSchema.pre('save', async function hashPassword(next) {
   const user = this;
   try {
