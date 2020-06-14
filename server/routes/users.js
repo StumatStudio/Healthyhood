@@ -7,11 +7,11 @@ const router = express.Router();
 // so may not need this function, but it can be used to test that
 // the server can talk to the user database correctly and see the
 // list of users returned by the DB
-router.get('/login', userController.getAllUsers, (req, res) => {
+router.get('/', userController.getAllUsers, (req, res) => {
   // userController.getAllUsers is expected to return the list of users
   // in res.local.users
   // If there is an error, the express global error handler will catch it
-  console.log('router.get /login users', res.locals.users);
+  console.log('router.get / ', res.locals.users);
   res.sendStatus(200);
 });
 

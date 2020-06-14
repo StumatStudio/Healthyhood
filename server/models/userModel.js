@@ -1,8 +1,6 @@
 const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
 
-const MONGO_URI =
-  'mongodb+srv://healthyhood:yKoXXLThFvvHWnHP@cluster0-rcpls.mongodb.net/healthyhood';
 const { Schema } = mongoose;
 const SALT_WORK_FACTOR = 10;
 const userSchema = new Schema(
@@ -13,9 +11,11 @@ const userSchema = new Schema(
   { collection: 'users' }
 );
 
+// We only need to connect to the DB once, so perhaps move
+// this to a separate file, perhaps server.js
 mongoose.set('useCreateIndex', true);
 mongoose
-  .connect(MONGO_URI, {
+  .connect(process.env.MONGO_URI, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
     dbName: 'healthyhood',
