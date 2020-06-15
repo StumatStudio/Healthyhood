@@ -9,49 +9,40 @@ const userController = {};
  */
 userController.getAllUsers = (req, res, next) => {
   console.log('Invoked userController.getAllUsers');
-  try {
-    models.Users.find({}, (err, users) => {
-      // if a database error occurs, call next with the error message passed in
-      // for the express global error handler to catch
-      if (err)
-        return next(
-          `Error in userController.getAllUsers: ${JSON.stringify(err)}`
-        );
-
-      // store retrieved users into res.locals and move on to next middleware
-      res.locals.users = users;
+  models.Users.find({})
+    .exec()
+    .then(data => {
+      res.locals.users = data;
       return next();
-    });
-  } catch (e) {
-    console.log('userController.getAllUsers caught error', e);
-  }
+    })
+    .catch(error =>
+      next({
+        message: `Error in userController.getAllUsers middleware: ${error}`,
+        serverMessage: {
+          err: 'An error occurred in userController.getAllUsers middleware.',
+        },
+      })
+    );
 };
 
 /**
  * createUser - create and save a new User into the database.
  */
 userController.createUser = (req, res, next) => {
-  if (
-    typeof req.body.username === 'string' &&
-    typeof req.body.password === 'string'
-  ) {
-    // create a query to the db to create a new user
-    models.Users.create(req.body)
-      .then(data => {
-        res.locals.id = data.id;
-        return next();
+  console.log('Invoked userController.createUser');
+  models.Users.create(req.body)
+    .then(data => {
+      res.locals.user = data;
+      return next();
+    })
+    .catch(error =>
+      next({
+        message: `Error in userController.createUser middleware: ${error}`,
+        serverMessage: {
+          err: 'An error occurred in userController.getAllUsers middleware.',
+        },
       })
-      .catch(error => {
-        res.locals.error = error;
-        return next();
-      });
-  } else {
-    res.locals.error = {
-      errmsg:
-        'Error in userController.createUser: invalid credentials in request body',
-    };
-    return next();
-  }
+    );
 };
 
 /**
@@ -61,27 +52,44 @@ userController.createUser = (req, res, next) => {
  */
 userController.verifyUser = async (req, res, next) => {
   console.log('Invoked userController.verifyUser');
-  try {
-    const { password, username } = req.body;
+  const { password, username } = req.body;
 
-    const users = await models.Users.find({ username });
+  if (
+    typeof req.body.username !== 'string' ||
+    typeof req.body.password !== 'string' ||
+    username === undefined ||
+    password === undefined
+  )
+    return next({
+      message: 'userController.verifyUser: Bad request',
+      status: 400,
+      serverMessage: {
+        err: 'An error occurred in userController.verifyUser middleware.',
+      },
+    });
 
-    if (users.length === 0) {
-      res.locals.error = { errmsg: 'invalid username' };
-      return next();
-    }
+  const users = await models.Users.find({ username });
+  if (users.length === 0)
+    return next({
+      message: 'userController.verifyUser: Invalid username',
+      status: 401,
+      serverMessage: {
+        err: 'An error occurred in userController.verifyUser middleware.',
+      },
+    });
 
-    const isMatch = await bcrypt.compare(password, users[0].password);
-
-    if (isMatch) {
-      res.locals.id = users[0].id;
-    } else {
-      res.locals.error = { errmsg: 'invalid password' };
-    }
-
+  const isMatch = await bcrypt.compare(password, users[0].password);
+  if (isMatch) {
+    res.locals.user = users[0];
     return next();
-  } catch (e) {
-    console.log('userController.verifyUser caught error', e);
+  } else {
+    return next({
+      message: 'userController.verifyUser: Invalid password',
+      status: 401,
+      serverMessage: {
+        err: 'An error occurred in userController.verifyUser middleware.',
+      },
+    });
   }
 };
 

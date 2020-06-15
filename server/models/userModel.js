@@ -11,6 +11,8 @@ const userSchema = new Schema(
   { collection: 'users' }
 );
 
+// Pre hook will be called before user credentials are saved to the DB
+// This will hash the password in the DB when new users are created
 userSchema.pre('save', async function hashPassword(next) {
   const user = this;
   try {
@@ -18,8 +20,12 @@ userSchema.pre('save', async function hashPassword(next) {
     user.password = hash;
     next();
   } catch (e) {
-    console.log('userSchema.pre caught error', e);
-    next(e);
+    next({
+      message: `An error occurred in userSchema.pre save hook: ${e}`,
+      serverMessage: {
+        err: 'An error occurred in the userSchema.pre save hook.',
+      },
+    });
   }
 });
 

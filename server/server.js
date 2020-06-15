@@ -23,7 +23,7 @@ mongoose
     dbName: 'healthyhood',
   })
   .then(() => console.log('Connected to Mongo DB: healthyhood'))
-  .catch(err => console.log(err));
+  .catch(err => console.log(`Error occurred in mongoose.connect: ${err}`));
 
 // Global express error handler
 app.use(errorMiddle);
