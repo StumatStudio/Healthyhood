@@ -2,6 +2,7 @@ const express = require('express');
 const path = require('path');
 
 const users = require('../routes/users');
+const walkScore = require('../routes/walkScore');
 
 const baseUrl = process.env.BASE_URL;
 
@@ -13,6 +14,7 @@ all of the routes within to the app object passed in
 module.exports = app => {
   // Traditional Routes
   app.use(`${baseUrl}/users`, users);
+  app.use(`${baseUrl}/walkscore`, walkScore);
 
   // Static files
   if (process.env.NODE_ENV !== 'development') {
