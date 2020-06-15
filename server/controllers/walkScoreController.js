@@ -10,14 +10,14 @@ const walkScoreController = {};
 // https://www.walkscore.com/professional/api.php
 walkScoreController.getWalkScore = (req, res, next) => {
   console.log('Invoked walkScoreController.getWalkScore', req.query);
-  const { lat, lon } = req.query;
-  fetch(
-    `https://api.walkscore.com/score?format=json&lat=${lat}&lon=${lon}&transit=1&bike=1&wsapikey=${process.env.WALKSCORE_KEY}`,
-    {
-      method: 'GET',
-      redirect: 'follow',
-    }
-  )
+  const { lat, lon, address } = req.query;
+  const API_URL = 'https://api.walkscore.com/score';
+  const params = `format=json&transit=1&bike=1&wsapikey=${process.env.WALKSCORE_KEY}`;
+  const URL = `${API_URL}?${params}&lat=${lat}&lon=${lon}&address=${address}`;
+  fetch(URL, {
+    method: 'GET',
+    redirect: 'follow',
+  })
     .then(response => {
       // console.log('response', response.status, response.statusText);
       res.statusCode = response.status;
