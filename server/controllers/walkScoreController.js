@@ -1,6 +1,13 @@
 const fetch = require('node-fetch');
 const walkScoreController = {};
 
+// getWalkScore will fetch the Walk Score for a given location
+// Required request parameters:
+//    lat: the latitude of the location
+//    lon: the longitude of the location
+//    address: URL encoded address (seems to work without this)
+// Further information on other parameters and response:
+// https://www.walkscore.com/professional/api.php
 walkScoreController.getWalkScore = (req, res, next) => {
   console.log('Invoked walkScoreController.getWalkScore', req.query);
   const { lat, lon } = req.query;
