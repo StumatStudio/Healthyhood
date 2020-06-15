@@ -16,14 +16,14 @@ const userSchema = new Schema(
 userSchema.pre('save', async function hashPassword(next) {
   const user = this;
   try {
-    const hash = await bcrypt.hash(user.password, SALT_WORK_FACTOR);
+    const hash = await bcrypt.hash(undefined, SALT_WORK_FACTOR);
     user.password = hash;
     next();
-  } catch (e) {
+  } catch (error) {
     next({
-      message: `An error occurred in userSchema.pre save hook: ${e}`,
+      message: 'Error occurred in userSchema.pre save hook',
       serverMessage: {
-        err: 'An error occurred in the userSchema.pre save hook.',
+        err: error,
       },
     });
   }

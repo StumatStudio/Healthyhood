@@ -17,9 +17,9 @@ userController.getAllUsers = (req, res, next) => {
     })
     .catch(error =>
       next({
-        message: `Error in userController.getAllUsers middleware: ${error}`,
+        message: 'Error in userController.getAllUsers middleware',
         serverMessage: {
-          err: 'An error occurred in userController.getAllUsers middleware.',
+          err: error,
         },
       })
     );
@@ -37,9 +37,9 @@ userController.createUser = (req, res, next) => {
     })
     .catch(error =>
       next({
-        message: `Error in userController.createUser middleware: ${error}`,
+        message: 'Error in userController.createUser middleware',
         serverMessage: {
-          err: 'An error occurred in userController.getAllUsers middleware.',
+          err: error,
         },
       })
     );
@@ -61,20 +61,20 @@ userController.verifyUser = async (req, res, next) => {
     password === undefined
   )
     return next({
-      message: 'userController.verifyUser: Bad request',
+      message: 'Error in userController.verifyUser middleware',
       status: 400,
       serverMessage: {
-        err: 'An error occurred in userController.verifyUser middleware.',
+        err: 'Bad Request',
       },
     });
 
   const users = await models.Users.find({ username });
   if (users.length === 0)
     return next({
-      message: 'userController.verifyUser: Invalid username',
+      message: 'Error in userController.verifyUser middleware',
       status: 401,
       serverMessage: {
-        err: 'An error occurred in userController.verifyUser middleware.',
+        err: 'Invalid username',
       },
     });
 
@@ -84,10 +84,10 @@ userController.verifyUser = async (req, res, next) => {
     return next();
   } else {
     return next({
-      message: 'userController.verifyUser: Invalid password',
+      message: 'Error in userController.verifyUser middleware',
       status: 401,
       serverMessage: {
-        err: 'An error occurred in userController.verifyUser middleware.',
+        err: 'Invalid password',
       },
     });
   }
