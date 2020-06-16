@@ -1,6 +1,9 @@
 import React, { Component } from 'react';
 import Form from './common/Form';
 
+import { connect } from 'react-redux'
+import * as apiActions from '../store/entities/apiActions';
+
 class LongLatTest extends Form {
   /*
     It's most helpful to initiate your state with names of your form fields.
@@ -42,4 +45,8 @@ class LongLatTest extends Form {
   }
 }
 
-export default LongLatTest;
+const mapDispatchToProps = dispatch => ({
+  apiStart: () => dispatch(apiActions.apiCallRequested({ url: '/api' })),
+})
+
+export default connect(null, mapDispatchToProps)(LongLatTest);

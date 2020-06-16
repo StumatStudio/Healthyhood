@@ -62,6 +62,7 @@
     "cors": "^2.8.5",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
+    "google-maps-react": "^2.0.6",
     "mongoose": "^5.9.18",
     "prop-types": "^15.7.2",
     "react": "^16.13.1",
