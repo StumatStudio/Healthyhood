@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
-import Form from './common/Form';
+import Form from '../common/Form';
 
 import { connect } from 'react-redux'
-import * as apiActions from '../store/entities/apiActions';
+import * as apiActions from '../../store/entities/apiActions';
 
 class LongLatTest extends Form {
   /*

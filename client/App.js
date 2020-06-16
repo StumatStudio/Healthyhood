@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import LongLatTest from './components/LongLatTest';
-import NewerMapContainer from './components/NewerMapContainer';
-import MapContainer2 from './components/MapContainer2';
-import NewMapContainer from './components/NewMapContainer';
+import LongLatTest from './components/experimental/LongLatTest';
+import NewerMapContainer from './components/experimental/NewerMapContainer';
+import MapContainer2 from './components/experimental/MapContainer2';
+import NewMapContainer from './components/experimental/NewMapContainer';
 
 class App extends Component {
   render() {
