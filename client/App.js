@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import LongLatTest from './components/LongLatTest';
-import MapContainer from './components/MapContainer';
+import NewerMapContainer from './components/NewerMapContainer';
+import MapContainer2 from './components/MapContainer2';
+import NewMapContainer from './components/NewMapContainer';
 
 class App extends Component {
   render() {
@@ -9,8 +11,8 @@ class App extends Component {
     return (
       <div>
         <h1>Hello STUMAT!!!</h1>
-        <LongLatTest />
-        <MapContainer />
+        {/* <LongLatTest /> */}
+        <NewerMapContainer />
       </div>
     );
   }

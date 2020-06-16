@@ -16,10 +16,10 @@ module.exports = app => {
 
   // Static files
   if (process.env.NODE_ENV !== 'development') {
-    app.use('/dist', express.static(path.join(__dirname, '../dist')));
+    app.use('/dist', express.static(path.join(__dirname, '../../dist')));
 
     app.get('/', (req, res) => {
-      res.sendFile(path.join(__dirname, '../dist/index.html'));
+      res.sendFile(path.join(__dirname, '../../dist/index.html'));
     });
   }
 
