@@ -12,7 +12,7 @@ class App extends Component {
         <LongLatTest />
         <MapContainer />
       </div>
-    )
+    );
   }
 }
 
