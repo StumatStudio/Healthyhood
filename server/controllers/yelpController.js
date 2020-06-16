@@ -53,7 +53,7 @@ yelpController.businessDetails = (req, res, next) => {
   console.log('Invoked yelpController.businessDetails');
   const { id } = req.query;
   const YELP_API = 'https://api.yelp.com/v3/businesses/';
-  const params = `{${id}}`;
+  const params = `${id}`;
   const URL = `${YELP_API}${params}`;
   fetch(URL, {
     method: 'GET',
