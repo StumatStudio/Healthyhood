@@ -27,7 +27,7 @@ const apiCall = ({ dispatch, getState }) => next => async action => {
   if (action.type !== apiActions.apiCallRequested.type) return next(action);
 
   // If we're here we dispatched an apiCAllRequestedAction
-  const baseUrl = 'env variable for reaching server';
+  const baseUrl = process.env.BASE_URL;
   const { apiCallFailed, apiCallRequested, apiCallSuccess } = apiActions;
   const { url, method, data, onStart, onSuccess, onError } = action.payload;
 
