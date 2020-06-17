@@ -63,6 +63,9 @@ const usersReducer = createReducer(initialState, {
 
 // Reducer Cases
 function usersRequestCase(state, action) {
+  console.log('in reducer - type', action.type);
+  console.log('in reducer - payload', action.payload);
+
   state.isLoading = true;
 }
 
