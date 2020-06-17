@@ -2,57 +2,60 @@ import { createAction, createReducer } from '@reduxjs/toolkit';
 import * as apiActions from './apiActions';
 
 const initialState = {
-  mapData: {
-    location: 'mapTest',
+  yelpData: {
+    places: {},
   },
+  walkData: {
+
+  }
   isLoading: false,
   lastFetch: null,
 };
 
 // Action Types
-const MAP_REQUEST = 'mapRequest';
-const MAP_REQUEST_FAILED = 'mapRequestFailed';
-const MAP_RECEIVED = 'mapReceived';
+const DATA_REQUEST = 'dataRequest';
+const DATA_REQUEST_FAILED = 'dataRequestFailed';
+const YELP_DATA_RECEIVED = 'dataReceived';
 
 // Action Creators
-export const mapRequest = createAction(MAP_REQUEST); // No payload, sets isLoading true
-export const mapRequestFailed = createAction(MAP_REQUEST_FAILED); // No payload sets loading false
-export const mapReceived = createAction(); // requires mapData as payload
+export const dataRequest = createAction(DATA_REQUEST); // No payload, sets isLoading true
+export const dataRequestFailed = createAction(DATA_REQUEST_FAILED); // No payload sets loading false
+export const yelpDataReceived = createAction(); // requires latLong obj as payload
 
 // Reducers
-const mapReducer = createReducer(initialState, {
-  [MAP_REQUEST]: mapRequestCase,
-  [MAP_REQUEST_FAILED]: mapRequestFailedCase,
-  [MAP_RECEIVED]: mapReceivedCase,
+const dataReducer = createReducer(initialState, {
+  [DATA_REQUEST]: dataRequestCase,
+  [DATA_REQUEST_FAILED]: dataRequestFailedCase,
+  [YELP_DATA_RECEIVED]: yelpDataReceivedCase,
 });
 
 // Reducer Cases
-function mapRequestCase(state, action) {
+function dataRequestCase(state, action) {
   state.isLoading = true;
 }
 
-function mapRequestFailedCase(state, action) {
+function dataRequestFailedCase(state, action) {
   state.isLoading = false;
 }
 
-function mapReceivedCase(state, action) {
-  const { data: mapData } = action.payload;
-  state.mapData = mapData;
+function yelpDataReceivedCase(state, action) {
+  const { data: yelpData } = action.payload;
+  state.yelpData = yelpData;
   state.isLoading = false;
 }
 
-export default mapReducer;
+export default dataReducer;
 
 // Action Generators
 const { apiCallRequested } = apiActions;
-const mapUrl = 'whateverBackendNeeds';
+const dataUrl = '/business/search';
 
-export const getMapData = () =>
+export const getYelpData = (latLongObj) =>
   apiCallRequested({
-    url: mapUrl,
+    url: dataUrl,
     method: 'get',
-    data: '',
-    onStart: MAP_REQUEST,
-    onSuccess: MAP_RECEIVED,
-    onError: MAP_REQUEST_FAILED,
+    data: latLongObj,
+    onStart: DATA_REQUEST,
+    onSuccess: YELP_DATA_RECEIVED,
+    onError: DATA_REQUEST_FAILED,
   });
