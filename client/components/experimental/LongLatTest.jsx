@@ -3,8 +3,7 @@ import Form from '../common/Form';
 
 import { connect } from 'react-redux'
 import * as apiActions from '../../store/entities/apiActions';
-import { getYelpData } from '../../store/entities/mapEntity';
-import { getWalkData } from '../../store/entities/mapEntity';
+import { getYelpData, updateUserLocation, getWalkData } from '../../store/entities/mapEntity';
 
 class LongLatTest extends Form {
   /*
@@ -15,14 +14,15 @@ class LongLatTest extends Form {
   */
   state = {
     data: {
-      longitude: '',
-      latitude: '',
+      lng: '',
+      lat: '',
     },
   }
 
   doSubmit = () => {
     console.log('Submitted');
     console.log('state', this.state.data);
+    this.props.updateUserLocation(this.state.data)
     this.props.getYelpData(this.state.data);
     this.props.getWalkData(this.state.data);
   }
@@ -35,10 +35,10 @@ class LongLatTest extends Form {
           <h5>Coordinates</h5>
           <div className="row">
             <div className="col">
-              {this.renderInput('longitude', 'Enter Long:', 'text', 'Enter Long coords')}
+              {this.renderInput('lng', 'Enter Long:', 'text', 'Enter Long coords')}
             </div>
             <div className="col">
-              {this.renderInput('latitude', 'Enter Lat:', 'text', 'Enter Lat coords')}
+              {this.renderInput('lat', 'Enter Lat:', 'text', 'Enter Lat coords')}
             </div>
           </div>
           <div>
@@ -51,6 +51,7 @@ class LongLatTest extends Form {
 }
 
 const mapDispatchToProps = dispatch => ({
+  updateUserLocation: latLongObj => dispatch(updateUserLocation(latLongObj)),
   getYelpData: latLongObj => dispatch(getYelpData(latLongObj)),
   getWalkData: latLongObj => dispatch(getWalkData(latLongObj)),
 })
