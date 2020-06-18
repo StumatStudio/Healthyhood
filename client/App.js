@@ -1,12 +1,22 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { connect } from 'react-redux';
+import NavBar from './components/NavBar/NavBar';
+import ComponentsRouting from './components/ComponentsRouting/ComponentsRouting';
+import Footer from './components/Footer/Footer';
+import BackgroundAnimation from './components/BackgroundAnimation/BackgroundAnimation';
+import UserContextProvider from './contexts/UserContext';
 
-class App extends Component {
-  render() {
-    console.log(this.props.currentUser);
-    return <h1>Hello STUMAT!!!</h1>;
-  }
-}
+const App = () => (
+  <>
+    <UserContextProvider>
+      <NavBar />
+      <ComponentsRouting />
+    </UserContextProvider>
+    <Footer />
+    {/* *****************/}
+    <BackgroundAnimation />
+  </>
+);
 
 const mapStateToProps = state => ({
   currentUser: state,
