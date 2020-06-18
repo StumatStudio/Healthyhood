@@ -17,6 +17,9 @@ module.exports = app => {
   app.use(`${baseUrl}/users`, users);
   app.use(`${baseUrl}/walkscore`, walkScore);
   app.use(`${baseUrl}/yelp`, yelp);
+  // app.get(`${baseUrl}/nope`, (req, res) => {
+  //   res.status(200).json({ message: 'YOU DID IT!!' });
+  // });
 
   // Static files
   if (process.env.NODE_ENV !== 'development') {
