@@ -45,7 +45,7 @@ const apiCall = ({ dispatch, getState }) => next => async action => {
       url,
       method,
       data,
-    })
+    });
 
     // If we're here, the call was a success.
     // For Dev Tools to track success

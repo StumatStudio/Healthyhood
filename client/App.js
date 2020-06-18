@@ -19,7 +19,7 @@ class App extends Component {
     return (
       <div>
         <h1>Hello STUMAT!!!</h1>
-        {/* <LongLatTest /> */}
+        <LongLatTest />
         <NewerMapContainer />
         <button onClick={this.handleClick}>Click Me</button>
       </div>
