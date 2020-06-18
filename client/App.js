@@ -15,7 +15,7 @@ const App = () => (
       <ComponentsRouting />
     </UserContextProvider>
     <Footer />
-    {/* *****************/}
+    {/*******************/}
     <BackgroundAnimation />
   </>
 );
@@ -28,4 +28,4 @@ const mapDispatchToProps = dispatch => ({
   usersRequest: payload => dispatch(usersRequest(payload)),
 });
 
-export default connect(mapStateToProps)(App);
+export default connect(mapStateToProps, mapDispatchToProps)(App);

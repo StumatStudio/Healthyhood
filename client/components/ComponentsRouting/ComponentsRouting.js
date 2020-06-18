@@ -8,24 +8,21 @@ import Login from './../Login/Login';
 import AuthenticatedRoute from './AuthenticatedRoute';
 import { UserContext } from './../../contexts/UserContext';
 
-const ComponentsRouting = () => {
-  const { isLoggedIn } = useContext(UserContext);
-  return (
-    <div className="content">
-      <Switch>
-        {/* <Route path="/user/:username" component={UserSection} /> */}
-        <Route path="/signup" component={SignUp} />
-        <Route path="/login" component={Login} />
-        <Route path="/logout" component={Home} />
-        <Redirect from="/login" to="/" />
-        <Redirect from="/signup" to="/" />
-        <AuthenticatedRoute path="/user" component={UserSection} />
-        <Route path="/not-found" component={NotFound} />
-        <Route path="/" exact component={Home} />
-        <Redirect to="/not-found" />
-      </Switch>
-    </div>
-  );
-};
+const ComponentsRouting = () => (
+  <Switch>
+    {/* <Route path="/user/:username" component={UserSection} /> */}
+    <Route path="/signup" component={SignUp} />
+    <Route path="/login" component={Login} />
+    <Route path="/logout" component={Home} />
+    <AuthenticatedRoute path="/user" component={UserSection} />
+    <Route path="/not-found" component={NotFound} />
+    <Route path="/" exact component={Home} />
+    {/*******************************************************/}
+    <Redirect from="/signup" to="/" />
+    <Redirect from="/login" to="/" />
+    <Redirect from="/logout" to="/" />
+    <Redirect to="/not-found" />
+  </Switch>
+);
 
 export default ComponentsRouting;
