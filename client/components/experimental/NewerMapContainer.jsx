@@ -1,50 +1,54 @@
 import React from 'react';
 import { GoogleMap, LoadScript, Marker } from '@react-google-maps/api';
+import { useSelector } from 'react-redux';
 
 const containerStyle = {
   width: '800px',
   height: '800px',
 };
 
-// const center = { lat: 47.444, lng: -122.176 };
-
-// Codesmith Venice = 33.987854, -118.470531
-const autoLocation = { lat: 33.987854, lng: -118.470531 };
-
 function MyComponent() {
   console.log('state', React.useState());
   const [map, setMap] = React.useState(null);
+  const { yelpData, walkData, autoLocation, userEnteredLocation } = useSelector(
+    state => state.map
+  );
+  const { restaurants, gyms } = yelpData;
 
-  // try to detect the user's location using the Geolocation API
-  // currently only a success callback is used
-  // should consider how we want to handle error flows
-  // perhaps default to some known location (e.g. Codesmith Venice)
-  if (navigator.geolocation) {
-    navigator.geolocation.getCurrentPosition(function (position) {
-      autoLocation.lat = position.coords.latitude;
-      autoLocation.lng = position.coords.longitude;
-      console.log('myComponent autoLocation', autoLocation);
-    });
-  }
+  console.log('userLoc', userEnteredLocation);
+  console.log('yelp', yelpData);
+  console.log('walk', walkData);
+
+  const mapCenter = userEnteredLocation.isPrimary
+    ? userEnteredLocation
+    : autoLocation;
 
   const onLoad = React.useCallback(function callback(map) {
     console.log('map', map);
     const bounds = new window.google.maps.LatLngBounds();
     // map.fitBounds(bounds);
     setMap(map);
-
-    // if (navigator.geolocation) {
-    //   navigator.geolocation.getCurrentPosition(function (position) {
-    //     autoLocation.lat = position.coords.latitude;
-    //     autoLocation.lng = position.coords.longitude;
-    //     console.log('geo autoLocation', autoLocation);
-    //   });
-    // }
   }, []);
 
   const onUnmount = React.useCallback(function callback(map) {
     setMap(null);
   }, []);
+
+  const createMarker = (busnObj, idx) => {
+    const { coordinates, name } = busnObj;
+    const coordObj = {
+      lat: parseFloat(coordinates.latitude),
+      lng: parseFloat(coordinates.longitude),
+    };
+    return (
+      <Marker
+        position={coordObj}
+        title={name}
+        animation={2}
+        key={`${name}${idx}`}
+      />
+    );
+  };
 
   // this style below will hide all default points of interest
   const myStyles = [
@@ -59,7 +63,7 @@ function MyComponent() {
     <LoadScript googleMapsApiKey={process.env.GMAPS_KEY}>
       <GoogleMap
         mapContainerStyle={containerStyle}
-        center={autoLocation}
+        center={mapCenter}
         zoom={15}
         onLoad={onLoad}
         onUnmount={onUnmount}
@@ -69,6 +73,12 @@ function MyComponent() {
       >
         {/* Child components, such as markers, info windows, etc. */}
         <Marker position={autoLocation} title={'Your Location'} />
+        {restaurants &&
+          restaurants.businesses.map((busnObj, idx) =>
+            createMarker(busnObj, idx)
+          )}
+        {gyms &&
+          gyms.businesses.map((busnObj, idx) => createMarker(busnObj, idx))}
       </GoogleMap>
     </LoadScript>
   );
