@@ -22,7 +22,7 @@ const UserSection = props => {
     <>
       <p>Warning: Restricted Area</p>
       <h1>Hello STUMAT!!!</h1>
-      {/* <LongLatTest /> */}
+      <LongLatTest />
       <NewerMapContainer />
       <button onClick={handleClick}>Click Me</button>
     </>
