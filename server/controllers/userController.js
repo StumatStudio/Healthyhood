@@ -30,6 +30,24 @@ userController.getAllUsers = (req, res, next) => {
  */
 userController.createUser = (req, res, next) => {
   console.log('Invoked userController.createUser');
+  const { password, username, email } = req.body;
+
+  if (
+    typeof req.body.username !== 'string' ||
+    typeof req.body.email !== 'string' ||
+    typeof req.body.password !== 'string' ||
+    username === undefined ||
+    email === undefined ||
+    password === undefined
+  )
+    return next({
+      message: 'Error in userController.createUser middleware',
+      status: 400,
+      serverMessage: {
+        err: 'Bad Request',
+      },
+    });
+
   models.Users.create(req.body)
     .then(data => {
       res.locals.user = data;
