@@ -8,6 +8,7 @@ import UserContextProvider from './contexts/UserContext';
 
 import { usersRequest } from './store/entities/userEntity';
 
+<<<<<<< HEAD
 const App = () => (
   <>
     <UserContextProvider>
