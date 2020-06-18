@@ -19,6 +19,14 @@ class LongLatTest extends Form {
     },
   }
 
+  renderRestaurantTotal = (busnArr) => {
+    return <h5>{`Total Restaurants: ${busnArr.total}`}</h5>
+  }
+
+  renderGymTotal = (busnArr) => {
+    return <h5>{`Total Gyms: ${busnArr.total}`}</h5>
+  }
+
   doSubmit = () => {
     console.log('Submitted');
     console.log('state', this.state.data);
@@ -28,27 +36,40 @@ class LongLatTest extends Form {
   }
 
   render() {
+    const { yelpData, walkData } = this.props.map;
+    const { restaurants, gyms } = yelpData;
     return (
-      <div className="formContainer">
-        <h1>Long Lat Test Form</h1>
-        <form onSubmit={this.handleSubmit}> {/*Inherits this from Form component*/}
-          <h5>Coordinates</h5>
-          <div className="row">
-            <div className="col">
-              {this.renderInput('lng', 'Enter Long:', 'text', 'Enter Long coords')}
+      <div>
+        <div>
+          {restaurants && this.renderRestaurantTotal(restaurants)}
+          {gyms && this.renderGymTotal(gyms)}
+        </div>
+
+        <div className="formContainer">
+          <h1>Long Lat Test Form</h1>
+          <form onSubmit={this.handleSubmit}> {/*Inherits this from Form component*/}
+            <h5>Coordinates</h5>
+            <div className="row">
+              <div className="col">
+                {this.renderInput('lng', 'Enter Long:', 'text', 'Enter Long coords')}
+              </div>
+              <div className="col">
+                {this.renderInput('lat', 'Enter Lat:', 'text', 'Enter Lat coords')}
+              </div>
             </div>
-            <div className="col">
-              {this.renderInput('lat', 'Enter Lat:', 'text', 'Enter Lat coords')}
+            <div>
+              {this.renderButton('Submit', 'btnClass')}
             </div>
-          </div>
-          <div>
-            {this.renderButton('Submit', 'btnClass')}
-          </div>
-        </form>
+          </form>
+        </div>
       </div>
     );
   }
 }
+
+const mapStateToProps = state => ({
+  map: state.map,
+})
 
 const mapDispatchToProps = dispatch => ({
   updateUserLocation: latLongObj => dispatch(updateUserLocation(latLongObj)),
@@ -56,4 +77,4 @@ const mapDispatchToProps = dispatch => ({
   getWalkData: latLongObj => dispatch(getWalkData(latLongObj)),
 })
 
-export default connect(null, mapDispatchToProps)(LongLatTest);
+export default connect(mapStateToProps, mapDispatchToProps)(LongLatTest);

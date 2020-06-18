@@ -13,6 +13,8 @@ function MyComponent() {
   const { yelpData, walkData, autoLocation, userEnteredLocation } = useSelector(
     state => state.map
   );
+  const { restaurants, gyms } = yelpData;
+
   console.log('userLoc', userEnteredLocation);
   console.log('yelp', yelpData);
   console.log('walk', walkData);
@@ -20,7 +22,6 @@ function MyComponent() {
   const mapCenter = userEnteredLocation.isPrimary
     ? userEnteredLocation
     : autoLocation;
-
 
   const onLoad = React.useCallback(function callback(map) {
     console.log('map', map);
@@ -32,6 +33,22 @@ function MyComponent() {
   const onUnmount = React.useCallback(function callback(map) {
     setMap(null);
   }, []);
+
+  const createMarker = (busnObj, idx) => {
+    const { coordinates, name } = busnObj;
+    const coordObj = {
+      lat: parseFloat(coordinates.latitude),
+      lng: parseFloat(coordinates.longitude),
+    };
+    return (
+      <Marker
+        position={coordObj}
+        title={name}
+        animation={2}
+        key={`${name}${idx}`}
+      />
+    );
+  };
 
   // this style below will hide all default points of interest
   const myStyles = [
@@ -56,6 +73,12 @@ function MyComponent() {
       >
         {/* Child components, such as markers, info windows, etc. */}
         <Marker position={autoLocation} title={'Your Location'} />
+        {restaurants &&
+          restaurants.businesses.map((busnObj, idx) =>
+            createMarker(busnObj, idx)
+          )}
+        {gyms &&
+          gyms.businesses.map((busnObj, idx) => createMarker(busnObj, idx))}
       </GoogleMap>
     </LoadScript>
   );
