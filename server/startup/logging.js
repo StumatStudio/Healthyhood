@@ -8,13 +8,13 @@ requests / responses / errors etc. This can be accomplished here.
 */
 
 module.exports = () => {
-  process.on('uncaughtException', (ex) => {
+  process.on('uncaughtException', ex => {
     console.log('UNCAUGHT EXCEPTION PRCOESS:');
     console.log(ex.message);
     process.exit(1);
   });
 
-  process.on('unhandledRejection', (ex) => {
+  process.on('unhandledRejection', ex => {
     console.log('UNHANDLED PROMISE REJECTION:');
     console.log(ex.message);
     // console.log(ex);

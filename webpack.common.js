@@ -1,5 +1,6 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const Dotenv = require('dotenv-webpack');
 
 module.exports = {
   entry: {
@@ -29,10 +30,18 @@ module.exports = {
           loader: 'babel-loader',
           options: {
             presets: ['@babel/preset-env', '@babel/preset-react'],
-            plugins: ['@babel/plugin-transform-runtime'],
+            plugins: [
+              '@babel/plugin-transform-runtime',
+              '@babel/plugin-proposal-class-properties',
+            ],
           },
         },
       },
     ],
   },
+  resolve: {
+    // Allows importing JS / JSX files without specifying extension
+    extensions: ['.js', '.jsx'],
+  },
+  plugins: [new Dotenv()],
 };

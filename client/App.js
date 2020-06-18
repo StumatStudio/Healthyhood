@@ -6,6 +6,8 @@ import Footer from './components/Footer/Footer';
 import BackgroundAnimation from './components/BackgroundAnimation/BackgroundAnimation';
 import UserContextProvider from './contexts/UserContext';
 
+import { usersRequest } from './store/entities/userEntity';
+
 const App = () => (
   <>
     <UserContextProvider>
@@ -20,6 +22,10 @@ const App = () => (
 
 const mapStateToProps = state => ({
   currentUser: state,
+});
+
+const mapDispatchToProps = dispatch => ({
+  usersRequest: payload => dispatch(usersRequest(payload)),
 });
 
 export default connect(mapStateToProps)(App);

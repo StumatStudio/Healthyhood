@@ -5,3 +5,7 @@ body {
   background: linear-gradient(90deg, #FFDFDF 0%, #CDECFF 100%); 
   /*background: black*/
 }
+
+.row {
+  background-color: white;
+}
