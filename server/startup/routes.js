@@ -5,7 +5,6 @@ const users = require('../routes/users');
 const walkScore = require('../routes/walkScore');
 const yelp = require('../routes/yelp');
 
-
 const baseUrl = process.env.BASE_URL;
 
 /* 
@@ -18,7 +17,6 @@ module.exports = app => {
   app.use(`${baseUrl}/users`, users);
   app.use(`${baseUrl}/walkscore`, walkScore);
   app.use(`${baseUrl}/yelp`, yelp);
-
 
   // Static files
   if (process.env.NODE_ENV !== 'development') {
