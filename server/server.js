@@ -9,6 +9,14 @@ const PORT = process.env.PORT || 3000;
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+// app.get('/*', function (req, res) {
+//   res.sendFile(path.join(__dirname, './../client/index.html'), function (err) {
+//     if (err) {
+//       res.status(500).send(err);
+//     }
+//   });
+// });
+
 // Startup files
 require('./startup/logging')();
 require('./startup/database')();
