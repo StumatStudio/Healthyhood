@@ -16,21 +16,54 @@ const yelpController = {};
 yelpController.businessSearch = (req, res, next) => {
   console.log('Invoked yelpController.businessSearch');
   const { latitude, longitude } = req.query;
-  const radius = 100;
-  const term = '';
+  const radius = req.query.radius || process.env.YELP_RADIUS;
+
+  const gym = 'gym';
   const categories = '';
   const YELP_API = 'https://api.yelp.com/v3/businesses/search';
-  const params = `latitude=${latitude}&longitude=${longitude}&radius=${radius}&term=${term}&categories=${categories}`;
-  const URL = `${YELP_API}?${params}`;
-  fetch(URL, {
-    method: 'GET',
-    headers: {
-      Authorization: `Bearer ${process.env.YELP_KEY}`,
-    },
-  })
-    .then(response => response.json())
+  const gymParams = `latitude=${latitude}&longitude=${longitude}&radius=${radius}&term=${gym}&categories=${categories}`;
+  const gymURL = `${YELP_API}?${gymParams}`;
+
+  const restaurant = 'restaurant';
+  const restaurantParams = `latitude=${latitude}&longitude=${longitude}&radius=${radius}&term=${restaurant}&categories=${categories}`;
+  const restaurantURL = `${YELP_API}?${restaurantParams}`;
+
+  const urls = [
+    ['gyms', gymURL],
+    ['restaurants', restaurantURL],
+  ];
+
+  res.locals.business = {};
+
+  // use map() to perform a fetch and handle the response for each url
+  Promise.all(
+    urls.map(([type, url]) =>
+      fetch(url, {
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer ${process.env.YELP_KEY}`,
+        },
+      })
+        .then(response => response.json())
+        .then(data => {
+          // console.log('URL fetch returned', data);
+          res.locals.business[type] = data;
+        })
+        .catch(error =>
+          next({
+            message: 'Error in yelpController.businessSearch',
+            serverMessage: {
+              err: error,
+            },
+          })
+        )
+    )
+  )
     .then(data => {
-      res.locals.business = data;
+      console.log('All data returned', data);
+      console.log('res.local', res.locals.business);
+      // console.log('Gyms', res.local.gyms);
+      // console.log('Restaurants', res.local.restaurants);
       return next();
     })
     .catch(error =>
@@ -41,6 +74,26 @@ yelpController.businessSearch = (req, res, next) => {
         },
       })
     );
+
+  // fetch(URL, {
+  //   method: 'GET',
+  //   headers: {
+  //     Authorization: `Bearer ${process.env.YELP_KEY}`,
+  //   },
+  // })
+  //   .then(response => response.json())
+  //   .then(data => {
+  //     res.locals.business.gyms = data;
+  //     return next();
+  //   })
+  //   .catch(error =>
+  //     next({
+  //       message: 'Error in yelpController.businessSearch',
+  //       serverMessage: {
+  //         err: error,
+  //       },
+  //     })
+  //   );
 };
 
 // Yelp Bussiness Details
