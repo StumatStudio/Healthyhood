@@ -1,3 +1,11 @@
+body {
+  /*font-family: 'Roboto Mono', monospace;*/
+  /*font-family: 'DM Mono', monospace;*/
+  font-family: 'Press Start 2P', cursive;
+  background: linear-gradient(90deg, #FFDFDF 0%, #CDECFF 100%); 
+  /*background: black*/
+}
+
 .row {
   background-color: white;
 }

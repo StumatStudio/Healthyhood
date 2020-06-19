@@ -4,6 +4,7 @@ const path = require('path');
 const users = require('../routes/users');
 const walkScore = require('../routes/walkScore');
 const yelp = require('../routes/yelp');
+const iqAir = require('../routes/iqAir');
 
 const baseUrl = process.env.BASE_URL;
 
@@ -17,6 +18,8 @@ module.exports = app => {
   app.use(`${baseUrl}/users`, users);
   app.use(`${baseUrl}/walkscore`, walkScore);
   app.use(`${baseUrl}/yelp`, yelp);
+  app.use(`${baseUrl}/iqair`, iqAir);
+
   // app.get(`${baseUrl}/nope`, (req, res) => {
   //   res.status(200).json({ message: 'YOU DID IT!!' });
   // });
