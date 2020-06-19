@@ -34,21 +34,39 @@ function MyComponent() {
     setMap(null);
   }, []);
 
-  const createMarker = (busnObj, idx) => {
+  // Choose marker icons via this object
+  const markerTypes = {
+    blue: 'http://maps.google.com/mapfiles/ms/icons/blue-dot.png',
+    green: 'http://maps.google.com/mapfiles/ms/icons/green-dot.png',
+    pink: 'http://maps.google.com/mapfiles/ms/icons/pink-dot.png',
+    yellow: 'http://maps.google.com/mapfiles/ms/icons/yellow-dot.png',
+    purple: 'http://maps.google.com/mapfiles/ms/icons/purple-dot.png',
+  };
+
+  const createMarker = (busnObj, idx, type) => {
+
     const { coordinates, name } = busnObj;
     const coordObj = {
       lat: parseFloat(coordinates.latitude),
       lng: parseFloat(coordinates.longitude),
     };
+    const colorIcon = () => {
+      if (type === 'rest') return markerTypes.green;
+      if (type === 'gym') return markerTypes.blue;
+      return null;
+    };
+
     return (
       <Marker
         position={coordObj}
         title={name}
         animation={2}
+        icon={colorIcon()}
         key={`${name}${idx}`}
       />
     );
   };
+
 
   // this style below will hide all default points of interest
   const myStyles = [
@@ -72,13 +90,15 @@ function MyComponent() {
         }}
       >
         {/* Child components, such as markers, info windows, etc. */}
-        <Marker position={autoLocation} title={'Your Location'} />
+        <Marker position={mapCenter} title={'Your Location'} />
         {restaurants &&
           restaurants.businesses.map((busnObj, idx) =>
-            createMarker(busnObj, idx)
+            createMarker(busnObj, idx, 'rest')
           )}
         {gyms &&
-          gyms.businesses.map((busnObj, idx) => createMarker(busnObj, idx))}
+          gyms.businesses.map((busnObj, idx) =>
+            createMarker(busnObj, idx, 'gym')
+          )}
       </GoogleMap>
     </LoadScript>
   );
