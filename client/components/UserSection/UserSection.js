@@ -12,11 +12,11 @@ const UserSection = props => {
   const { user } = useContext(UserContext); // For later use when we have user info to display
 
   const handleClick = () => {
-    console.log('inClick');
+    // console.log('inClick');
     props.usersRequest('This is the action payload');
   };
-  console.log(props.currentUser);
-  console.log('loadFlag', props.currentUser.users.isLoading);
+  //console.log(props.currentUser);
+  // console.log('loadFlag', props.currentUser.users.isLoading);
 
   return (
     <>
