@@ -8,23 +8,27 @@ const containerStyle = {
 };
 
 function MyComponent() {
-  console.log('state', React.useState());
+  // console.log('state', React.useState());
   const [map, setMap] = React.useState(null);
-  const { yelpData, walkData, autoLocation, userEnteredLocation } = useSelector(
-    state => state.map
-  );
+  const {
+    yelpData,
+    walkData,
+    iqAirData,
+    autoLocation,
+    userEnteredLocation,
+  } = useSelector(state => state.map);
   const { restaurants, gyms } = yelpData;
 
-  console.log('userLoc', userEnteredLocation);
-  console.log('yelp', yelpData);
-  console.log('walk', walkData);
+  // console.log('userLoc', userEnteredLocation);
+  // console.log('yelp', yelpData);
+  // console.log('walk', walkData);
 
   const mapCenter = userEnteredLocation.isPrimary
     ? userEnteredLocation
     : autoLocation;
 
   const onLoad = React.useCallback(function callback(map) {
-    console.log('map', map);
+    // console.log('map', map);
     const bounds = new window.google.maps.LatLngBounds();
     // map.fitBounds(bounds);
     setMap(map);
@@ -44,7 +48,6 @@ function MyComponent() {
   };
 
   const createMarker = (busnObj, idx, type) => {
-
     const { coordinates, name } = busnObj;
     const coordObj = {
       lat: parseFloat(coordinates.latitude),
@@ -66,7 +69,6 @@ function MyComponent() {
       />
     );
   };
-
 
   // this style below will hide all default points of interest
   const myStyles = [

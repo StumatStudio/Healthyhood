@@ -3,7 +3,7 @@ import Form from '../common/Form';
 
 import { connect } from 'react-redux'
 import * as apiActions from '../../store/entities/apiActions';
-import { getYelpData, updateUserLocation, getWalkData } from '../../store/entities/mapEntity';
+import { getYelpData, updateUserLocation, getWalkData, getIqAirData } from '../../store/entities/mapEntity';
 
 class LongLatTest extends Form {
   /*
@@ -19,30 +19,26 @@ class LongLatTest extends Form {
     },
   }
 
-  renderRestaurantTotal = (busnArr) => {
-    return <h5>{`Total Restaurants: ${busnArr.total}`}</h5>
-  }
-
-  renderGymTotal = (busnArr) => {
-    return <h5>{`Total Gyms: ${busnArr.total}`}</h5>
-  }
-
   doSubmit = () => {
     console.log('Submitted');
-    console.log('state', this.state.data);
+    // console.log('state', this.state.data);
     this.props.updateUserLocation(this.state.data)
     this.props.getYelpData(this.state.data);
     this.props.getWalkData(this.state.data);
+    this.props.getIqAirData(this.state.data);
   }
 
   render() {
-    const { yelpData, walkData } = this.props.map;
+    const { yelpData, walkData, iqAirData } = this.props.map;
     const { restaurants, gyms } = yelpData;
+
     return (
       <div>
         <div>
-          {restaurants && this.renderRestaurantTotal(restaurants)}
-          {gyms && this.renderGymTotal(gyms)}
+          <div>{restaurants && `Total Restaurants: ${restaurants.total}`}</div>
+          <div>{gyms && `Total Gyms: ${gyms.total}`}</div>
+          <div>{walkData.walkscore && `Walk Score: ${walkData.walkscore}`}</div>
+          <div>{iqAirData.data && `Air Score: ${iqAirData.data.current.pollution.aqius}`}</div>
         </div>
 
         <div className="formContainer">
@@ -75,6 +71,7 @@ const mapDispatchToProps = dispatch => ({
   updateUserLocation: latLongObj => dispatch(updateUserLocation(latLongObj)),
   getYelpData: latLongObj => dispatch(getYelpData(latLongObj)),
   getWalkData: latLongObj => dispatch(getWalkData(latLongObj)),
+  getIqAirData: latLongObj => dispatch(getIqAirData(latLongObj)),
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(LongLatTest);
