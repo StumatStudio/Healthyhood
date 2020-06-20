@@ -25,11 +25,15 @@ class LongLatTest extends Form {
     const { getYelpData, getWalkData, getIqAirData, getHealthScore, updateUserLocation } = this.props;
     updateUserLocation(this.state.data)
 
-    const secretSauce = await Promise.all([
-      getYelpData(this.state.data),
-      getWalkData(this.state.data),
-      getIqAirData(this.state.data),
-    ]);
+    try {
+      const secretSauce = await Promise.all([
+        getYelpData(this.state.data),
+        getWalkData(this.state.data),
+        getIqAirData(this.state.data),
+      ]);
+    } catch (e) {
+      console.log(e.message);
+    }
 
     const { yelpData, walkData, iqAirData } = this.props.map;
     const { restaurants, gyms } = yelpData;
@@ -38,7 +42,7 @@ class LongLatTest extends Form {
       yelpGyms: gyms.total,
       yelpRestaurants: restaurants.total,
       walkScore: walkData.walkscore,
-      iqairscore: iqAirData.data.current.pollution.aqius
+      iqAirScore: iqAirData.data.current.pollution.aqius
     }
 
     getHealthScore(secretSauceObj);

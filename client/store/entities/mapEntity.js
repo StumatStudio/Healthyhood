@@ -113,6 +113,7 @@ function iqAirDataReceivedCase(state, action) {
 }
 
 function healthScoreReceivedCase(state, action) {
+  console.log('health payload', action.payload);
   const { data: healthScore } = action.payload;
   state.healthScore = healthScore;
   state.healthComputed = true;
@@ -126,7 +127,7 @@ const { apiCallRequested } = apiActions;
 const yelpDataUrl = 'yelp/business/search';
 const walkDataUrl = '/walkscore';
 const iqAirUrl = '/iqair';
-const healthScoreUrl = '/nope';
+const healthScoreUrl = '/healthyscore';
 
 export const getYelpData = latLongObj => {
   const { lat, lng } = latLongObj;
@@ -168,13 +169,13 @@ export const getIqAirData = latLonObj => {
 
 export const getHealthScore = secretSauceObj => {
   const { walkScore, yelpGyms, yelpRestaurants, iqAirScore } = secretSauceObj;
-  const newUrl = `${iqAirUrl}?walkscore=${walkScore}&yelpgyms=${yelpGyms}&yelprestaurants=${yelpRestaurants}&iqairscore=${iqAirScore}`;
+  const newUrl = `${healthScoreUrl}?walkscore=${walkScore}&yelpgyms=${yelpGyms}&yelprestaurants=${yelpRestaurants}&iqairscore=${iqAirScore}`;
   return apiCallRequested({
-    url: healthScoreUrl,
+    url: newUrl,
     method: 'get',
     data: '',
     onStart: DATA_REQUEST,
-    onSuccess: IQAIR_DATA_RECEIVED,
+    onSuccess: HEALTH_SCORE_RECEIVED,
     onError: DATA_REQUEST_FAILED,
   });
 };
