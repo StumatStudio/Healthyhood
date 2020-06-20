@@ -23,7 +23,6 @@ const Login = ({
       joinedon: new Date().toDateString(),
     });
     setIsLoggedIn(true);
-    
   };
 
   const onUsernameChange = event => setUsername(event.target.value);

@@ -122,7 +122,7 @@ function updateUserCase(state, action) {
     password: '',
     joinedon: '',
   };
-  state.user = {...resetUser, ...action.payload};
+  state.user = { ...resetUser, ...action.payload };
 }
 
 export default usersReducer;
