@@ -15,14 +15,13 @@ body {
 }
 
 .google-places-autocomplete__suggestions-container {
-  color: red;
+  color: black;
 }
-
-.google-places-autocomplete__suggestion {
+/* .google-places-autocomplete__suggestion {
   background: black;
-}
+} */
 .google-places-autocomplete__suggestion:hover {
-  background: yellow;
+  background: lightblue;
 }
 
 .mapcontainer {
@@ -45,9 +44,32 @@ body {
   margin-bottom: 20px;
 }
 
-.healthyscoredetails {
+.healthyscorecontainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 600px;
+}
+
+.healthyhoodscore {
+  font-weight: 800;
+  text-align: center;
+  font-size: 30px;
+  margin-bottom: 15px;
+}
+
+.healthyscoredetailscontainer {
   display: flex;
   flex-direction: flex;
-  justify-content: space-evenly;
-  margin: 0px 10px;
+  justify-content: space-between;
+  margin: 10px 0px;
 }
+
+.yelpscoredetail, .walkscoredetail, .iqairscoredetail {
+  margin: 0px 30px;
+}
+
+.yelpscoredetail, .iqairscoredetail {
+  padding-top: 20px;
+}
+
