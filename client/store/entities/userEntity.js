@@ -7,13 +7,19 @@ const tokenKey = 'token';
 
 // Keep whatever user specific session data we want to use on the front end
 const initialState = {
-  userObj: {
-    name: 'userTest',
-    // etc
-  },
-  currentToken: '', // We can put current session token here for easy access
   isLoading: false, // Can trigger loading indicator based on flag
   lastFetch: null, // We can timestamp here to run comparisons for caching
+  username: '',
+  email: '',
+  password: '',
+  isLoggedIn: false,
+  wantToSignUp: true,
+  user: {
+    username: '',
+    email: '',
+    password: '',
+    joinedon: '',
+  },
 };
 
 /*
@@ -25,6 +31,11 @@ it's my preference to ensure consistency. Easily Changed if needed.
 const USERS_REQUEST = 'usersRequest';
 const USERS_REQUEST_FAILED = 'usersRequestFailed';
 const RECEIVED_USER = 'receivedUser';
+const SET_IS_LOGGED_IN = 'setIsLoggedIn';
+const SET_USERNAME = 'setUsername';
+const SET_EMAIL = 'setEmail';
+const SET_PASSWORD = 'setPassword';
+const UPDATE_USER = 'updateUser';
 
 /*
 Create action is part of Reduxjs toolkit and will automatically create
@@ -45,7 +56,11 @@ function usersRequest(actionPayload) {
 export const usersRequest = createAction(USERS_REQUEST); // no payload needed
 export const usersRequestFailed = createAction(USERS_REQUEST_FAILED); // no payload needed
 export const receivedUser = createAction(USERS_REQUEST_FAILED); // needs userObj as payload
-
+export const setIsLoggedIn = createAction(SET_IS_LOGGED_IN);
+export const setUsername = createAction(SET_USERNAME);
+export const setEmail = createAction(SET_EMAIL);
+export const setPassword = createAction(SET_PASSWORD);
+export const updateUser = createAction(UPDATE_USER);
 /*
 Create reducer is a redux toolkit function that maps function definitions
 to action types and returns a single reducer for export.
@@ -59,6 +74,11 @@ const usersReducer = createReducer(initialState, {
   [USERS_REQUEST]: usersRequestCase,
   [USERS_REQUEST_FAILED]: usersRequestFailedCase,
   [RECEIVED_USER]: receivedUserCase,
+  [SET_IS_LOGGED_IN]: setIsLoggedInCase,
+  [SET_USERNAME]: setUsernameCase,
+  [SET_EMAIL]: setEmailCase,
+  [SET_PASSWORD]: setPasswordCase,
+  [UPDATE_USER]: updateUserCase,
 });
 
 // Reducer Cases
@@ -75,8 +95,34 @@ function usersRequestFailedCase(state, action) {
 
 function receivedUserCase(state, action) {
   const { data: userInfo } = action.payload;
-  state.userObj = userInfo;
+  state.user = userInfo;
   state.isLoading = false;
+}
+
+function setIsLoggedInCase(state, action) {
+  state.isLoggedIn = action.payload;
+}
+
+function setUsernameCase(state, action) {
+  state.username = action.payload;
+}
+
+function setEmailCase(state, action) {
+  state.email = action.payload;
+}
+
+function setPasswordCase(state, action) {
+  state.password = action.payload;
+}
+
+function updateUserCase(state, action) {
+  const resetUser = {
+    username: '',
+    email: '',
+    password: '',
+    joinedon: '',
+  };
+  state.user = { ...resetUser, ...action.payload };
 }
 
 export default usersReducer;

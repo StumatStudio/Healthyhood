@@ -1,19 +1,19 @@
-import React, { useContext } from 'react';
-import NonAuthenticatedUserDisplay from './NonAuthenticatedUserDisplay';
+import React from 'react';
 import AuthenticatedUserDisplay from './AuthenticatedUserDisplay';
-import { UserContext } from './../../contexts/UserContext';
+import NonAuthenticatedUserDisplay from './NonAuthenticatedUserDisplay';
+import { connect } from 'react-redux';
+import { setIsLoggedIn } from '../../store/entities/userEntity';
 
-const ToggleAuthentication = () => {
-  const { isLoggedIn } = useContext(UserContext);
-  return (
-    <>
-      {isLoggedIn ? (
-        <AuthenticatedUserDisplay />
-      ) : (
-        <NonAuthenticatedUserDisplay />
-      )}
-    </>
-  );
-};
+const ToggleAuthentication = ({ isLoggedIn }) => (
+  <>
+    {isLoggedIn ? (
+      <AuthenticatedUserDisplay />
+    ) : (
+      <NonAuthenticatedUserDisplay />
+    )}
+  </>
+);
 
-export default ToggleAuthentication;
+const mapStateToProps = ({ users: { isLoggedIn } }) => ({ isLoggedIn });
+
+export default connect(mapStateToProps)(ToggleAuthentication);
