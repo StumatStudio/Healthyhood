@@ -17,11 +17,13 @@ const getInitialLocation = () => {
 };
 
 const initialState = {
-  yelpData: {
-    places: {},
-  },
+
+  yelpData: {},
   walkData: {},
   iqAirData: {},
+  healthComputed: false,
+  healthScore: 0,
+
   autoLocation: getInitialLocation(),
   userEnteredLocation: {
     lng: 0,
@@ -39,14 +41,18 @@ const UPDATE_USER_LOCATION = 'userUpdatedLocation';
 const YELP_DATA_RECEIVED = 'yelpDataReceived';
 const WALK_DATA_RECEIVED = 'walkDataReceived';
 const IQAIR_DATA_RECEIVED = 'iqAirDataReceived';
+const HEALTH_SCORE_RECEIVED = 'healthScoreReceived';
+const GROUP_API_STARTED = 'groupApiCallStarted';
 
 // Action Creators
 export const dataRequest = createAction(DATA_REQUEST); // No payload, sets isLoading true
 export const dataRequestFailed = createAction(DATA_REQUEST_FAILED); // No payload sets loading false
 export const updateUserLocation = createAction(UPDATE_USER_LOCATION); // Payload is object with lat, lng props
-export const yelpDataReceived = createAction(YELP_DATA_RECEIVED); // requires latLong obj as payload
-export const walkDataReceived = createAction(WALK_DATA_RECEIVED); // requires latLong obj as payload
-export const iqAirDataReceived = createAction(IQAIR_DATA_RECEIVED); // requires latLong obj as payload
+export const yelpDataReceived = createAction(YELP_DATA_RECEIVED); // requires apiData return as payload
+export const walkDataReceived = createAction(WALK_DATA_RECEIVED); // requires apiData return as payload
+export const iqAirDataReceived = createAction(IQAIR_DATA_RECEIVED); // requires apiData return as payload
+export const healthScoreReceived = createAction(HEALTH_SCORE_RECEIVED); // requires score returned from sever as payload
+export const groupApiCallStarted = createAction(GROUP_API_STARTED); // no payload
 
 // Reducers
 const dataReducer = createReducer(initialState, {
@@ -56,6 +62,8 @@ const dataReducer = createReducer(initialState, {
   [YELP_DATA_RECEIVED]: yelpDataReceivedCase,
   [WALK_DATA_RECEIVED]: walkDataReceivedCase,
   [IQAIR_DATA_RECEIVED]: iqAirDataReceivedCase,
+  [HEALTH_SCORE_RECEIVED]: healthScoreReceivedCase,
+  [GROUP_API_STARTED]: groupApiCallStartedCase,
 });
 
 // Reducer Cases
@@ -65,6 +73,11 @@ function dataRequestCase(state, action) {
 
 function dataRequestFailedCase(state, action) {
   state.isLoading = false;
+}
+
+function groupApiCallStartedCase(state, action) {
+  state.healthComputed = false;
+  state.healthScore = 0;
 }
 
 function updateUserLocationCase(state, action) {
@@ -79,6 +92,7 @@ function yelpDataReceivedCase(state, action) {
   const { data: yelpData } = action.payload;
   //console.log('yelpData', yelpData);
   state.yelpData = yelpData;
+  state.yelpDataReturned = Date.now();
   state.isLoading = false;
 }
 
@@ -86,6 +100,7 @@ function walkDataReceivedCase(state, action) {
   const { data: walkData } = action.payload;
   console.log('walk Data', walkData);
   state.walkData = walkData;
+  state.walkDataReturned = Date.now();
   state.isLoading = false;
 }
 
@@ -93,6 +108,14 @@ function iqAirDataReceivedCase(state, action) {
   const { data: iqAirData } = action.payload;
   console.log('Air Data', iqAirData);
   state.iqAirData = iqAirData;
+  state.iqAirDataReturned = Date.now();
+  state.isLoading = false;
+}
+
+function healthScoreReceivedCase(state, action) {
+  const { data: healthScore } = action.payload;
+  state.healthScore = healthScore;
+  state.healthComputed = true;
   state.isLoading = false;
 }
 
@@ -103,7 +126,7 @@ const { apiCallRequested } = apiActions;
 const yelpDataUrl = 'yelp/business/search';
 const walkDataUrl = '/walkscore';
 const iqAirUrl = '/iqair';
-// const dataUrl = '/nope';
+const healthScoreUrl = '/nope';
 
 export const getYelpData = latLongObj => {
   const { lat, lng } = latLongObj;
@@ -114,7 +137,6 @@ export const getYelpData = latLongObj => {
     data: '',
     onStart: DATA_REQUEST,
     onSuccess: YELP_DATA_RECEIVED,
-    onError: DATA_REQUEST_FAILED,
   });
 };
 
@@ -136,6 +158,19 @@ export const getIqAirData = latLonObj => {
   const newUrl = `${iqAirUrl}?lat=${lat}&lon=${lng}`;
   return apiCallRequested({
     url: newUrl,
+    method: 'get',
+    data: '',
+    onStart: DATA_REQUEST,
+    onSuccess: IQAIR_DATA_RECEIVED,
+    onError: DATA_REQUEST_FAILED,
+  });
+};
+
+export const getHealthScore = secretSauceObj => {
+  const { walkScore, yelpGyms, yelpRestaurants, iqAirScore } = secretSauceObj;
+  const newUrl = `${iqAirUrl}?walkscore=${walkScore}&yelpgyms=${yelpGyms}&yelprestaurants=${yelpRestaurants}&iqairscore=${iqAirScore}`;
+  return apiCallRequested({
+    url: healthScoreUrl,
     method: 'get',
     data: '',
     onStart: DATA_REQUEST,

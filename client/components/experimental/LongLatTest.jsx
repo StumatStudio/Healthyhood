@@ -3,7 +3,7 @@ import Form from '../common/Form';
 
 import { connect } from 'react-redux'
 import * as apiActions from '../../store/entities/apiActions';
-import { getYelpData, updateUserLocation, getWalkData, getIqAirData } from '../../store/entities/mapEntity';
+import { getYelpData, updateUserLocation, getWalkData, getIqAirData, getHealthScore } from '../../store/entities/mapEntity';
 
 class LongLatTest extends Form {
   /*
@@ -19,22 +19,39 @@ class LongLatTest extends Form {
     },
   }
 
-  doSubmit = () => {
+
+  doSubmit = async () => {
     console.log('Submitted');
-    // console.log('state', this.state.data);
-    this.props.updateUserLocation(this.state.data)
-    this.props.getYelpData(this.state.data);
-    this.props.getWalkData(this.state.data);
-    this.props.getIqAirData(this.state.data);
+    const { getYelpData, getWalkData, getIqAirData, getHealthScore, updateUserLocation } = this.props;
+    updateUserLocation(this.state.data)
+
+    const secretSauce = await Promise.all([
+      getYelpData(this.state.data),
+      getWalkData(this.state.data),
+      getIqAirData(this.state.data),
+    ]);
+
+    const { yelpData, walkData, iqAirData } = this.props.map;
+    const { restaurants, gyms } = yelpData;
+
+    const secretSauceObj = {
+      yelpGyms: gyms.total,
+      yelpRestaurants: restaurants.total,
+      walkScore: walkData.walkscore,
+      iqairscore: iqAirData.data.current.pollution.aqius
+    }
+
+    getHealthScore(secretSauceObj);
   }
 
   render() {
-    const { yelpData, walkData, iqAirData } = this.props.map;
+    const { yelpData, walkData, iqAirData, healthScore, healthComputed } = this.props.map;
     const { restaurants, gyms } = yelpData;
 
     return (
       <div>
         <div>
+          <div>{healthComputed && `Your Neighborhood Health Score: ${healthScore}`}</div>
           <div>{restaurants && `Total Restaurants: ${restaurants.total}`}</div>
           <div>{gyms && `Total Gyms: ${gyms.total}`}</div>
           <div>{walkData.walkscore && `Walk Score: ${walkData.walkscore}`}</div>
@@ -72,6 +89,7 @@ const mapDispatchToProps = dispatch => ({
   getYelpData: latLongObj => dispatch(getYelpData(latLongObj)),
   getWalkData: latLongObj => dispatch(getWalkData(latLongObj)),
   getIqAirData: latLongObj => dispatch(getIqAirData(latLongObj)),
+  getHealthScore: secretSauceObj => dispatch(getHealthScore(secretSauceObj)),
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(LongLatTest);
