@@ -5,7 +5,7 @@ const router = express.Router();
 
 router.get('/', iqAirController.getIqAirScore, (req, res) => {
   // on success, res.locals.iqairscore will contain the IQ Air json blob
-  console.log('router.get / iqairscore', res.locals.iqairscore);
+  console.log('iqAir router.get /', res.locals.iqairscore);
 
   // currently returning the entire blob of data to the client
   // should consider reducing this to what is actually needed:

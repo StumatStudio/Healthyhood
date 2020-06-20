@@ -9,7 +9,7 @@ router.get('/', walkScoreController.getWalkScore, (req, res) => {
   //  res.statusCode = http response
   //  res.statusMessage = status message
   //  res.locals.walkscore = status code
-  console.log('router.get / walkscore', res.locals.walkscore);
+  console.log('walkScore router.get /', res.locals.walkscore);
 
   // currently returning the entire blob of data to the client
   // should consider reducing this to what is actually needed:

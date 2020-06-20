@@ -11,11 +11,15 @@ const crimeController = {};
 crimeController.getCrimeData = (req, res, next) => {
   console.log('Invoked crimeController.getCrimeData', req.query);
   const { lat, lon } = req.query;
+
   const distance = '3mi';
-  const timeStart = new Date(2020, 1, 1).toJson();
-  const timeEnd = Date.now().toJson();
+
+  const timeStart = new Date();
+  timeStart.setFullYear(timeStart.getFullYear() - 1);
+  const timeEnd = new Date();
+
   const API_URL = 'https://api.crimeometer.com/v1/incidents/raw-data';
-  const params = `lat=${lat}&lon=${lon}&distance=${distance}&datetime_ini=${timeStart}&datetime_end=${timeEnd}`;
+  const params = `lat=${lat}&lon=${lon}&distance=${distance}&datetime_ini=${timeStart.toJSON()}&datetime_end=${timeEnd.toJSON()}`;
   const URL = `${API_URL}?${params}`;
   fetch(URL, {
     method: 'GET',
@@ -56,11 +60,15 @@ crimeController.getCrimeData = (req, res, next) => {
 crimeController.getCrimeStats = (req, res, next) => {
   console.log('Invoked crimeController.getCrimeStats', req.query);
   const { lat, lon } = req.query;
+
   const distance = '3mi';
-  const timeStart = new Date(2020, 1, 1).toJson();
-  const timeEnd = Date.now().toJson();
+
+  const timeStart = new Date();
+  timeStart.setFullYear(timeStart.getFullYear() - 1);
+  const timeEnd = new Date();
+
   const API_URL = 'https://api.crimeometer.com/v1/incidents/stats';
-  const params = `lat=${lat}&lon=${lon}&distance=${distance}&datetime_ini=${timeStart}&datetime_end=${timeEnd}`;
+  const params = `lat=${lat}&lon=${lon}&distance=${distance}&datetime_ini=${timeStart.toJSON()}&datetime_end=${timeEnd.toJSON()}`;
   const URL = `${API_URL}?${params}`;
   fetch(URL, {
     method: 'GET',
