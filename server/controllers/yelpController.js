@@ -17,15 +17,16 @@ yelpController.businessSearch = (req, res, next) => {
   console.log('Invoked yelpController.businessSearch');
   const { latitude, longitude } = req.query;
   const radius = req.query.radius || process.env.YELP_RADIUS;
+  const categories = '';
+  const limit = 50;
+  const YELP_API = 'https://api.yelp.com/v3/businesses/search';
 
   const gym = 'gym';
-  const categories = '';
-  const YELP_API = 'https://api.yelp.com/v3/businesses/search';
-  const gymParams = `latitude=${latitude}&longitude=${longitude}&radius=${radius}&term=${gym}&categories=${categories}`;
+  const gymParams = `latitude=${latitude}&longitude=${longitude}&radius=${radius}&term=${gym}&categories=${categories}&limit=${limit}`;
   const gymURL = `${YELP_API}?${gymParams}`;
 
-  const restaurant = 'restaurant';
-  const restaurantParams = `latitude=${latitude}&longitude=${longitude}&radius=${radius}&term=${restaurant}&categories=${categories}`;
+  const restaurant = 'fast food';
+  const restaurantParams = `latitude=${latitude}&longitude=${longitude}&radius=${radius}&term=${restaurant}&categories=${categories}&limit=${limit}`;
   const restaurantURL = `${YELP_API}?${restaurantParams}`;
 
   const urls = [

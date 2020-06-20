@@ -60,28 +60,43 @@ class LongLatTest extends Component {
     getHealthScore(secretSauceObj);
   }
 
+  displayWalkScore = (walkData) => {
+    return (
+      <img
+        className="giveMeData"
+        alt="WalkScore Date"
+        src={`https://pp.walk.sc/badge/walk/score/${walkData.walkscore}.svg`}
+      />
+    );
+  };
+
   render() {
     const { yelpData, walkData, iqAirData, healthScore, healthComputed, initialLoad } = this.props.map;
     const { restaurants, gyms } = yelpData;
 
     return (
-      <div>
-        <div>
-          <div>{!initialLoad && healthComputed && `Your Neighborhood Health Score: ${healthScore}`}</div>
-          <div>{!initialLoad && restaurants && `Total Restaurants: ${restaurants.total}`}</div>
-          <div>{!initialLoad && gyms && `Total Gyms: ${gyms.total}`}</div>
-          <div>{!initialLoad && walkData.walkscore && `Walk Score: ${walkData.walkscore}`}</div>
-          <div>{!initialLoad && iqAirData.data && `Air Score: ${iqAirData.data.current.pollution.aqius}`}</div>
+      <div className="latlongcontainer">
+        <div className='healthscorecontainer'>
+          <div className="healthyhoodscore">{!initialLoad && healthComputed && `Healthyhood Score: ${healthScore}`}</div>
+          <div className="healthyscoredetails">
+            <div className="yelpdatacontainer">
+              <img src="http://assets.stickpng.com/images/5842f092a6515b1e0ad75b17.png" width="100"></img>
+              <div>{!initialLoad && restaurants && `Restaurants: ${restaurants.total}`}</div>
+              <div>{!initialLoad && gyms && `Gyms: ${gyms.total}`}</div>
+            </div>
+            <div>{!initialLoad && walkData.walkscore && this.displayWalkScore(walkData)}</div>
+            <div>{!initialLoad && iqAirData.data && `Air Score: ${iqAirData.data.current.pollution.aqius}`}</div>
+          </div>
         </div>
 
-        <div>
+        <div className="mapcontrolcontainer">
           <GooglePlacesAutoComplete
             withSessionToken={true}
             onSelect={this.handleGoogleAutocompleteSelect}
-            fields={['geometry.location']}
+            placeholder={'Please enter an address...'}
           />
+          {!initialLoad && <button className="gethealthbutton" onClick={this.callApis}>Get Health</button>}
         </div>
-        {!initialLoad && <button onClick={this.callApis}>Get Health</button>}
 
       </div>
     );

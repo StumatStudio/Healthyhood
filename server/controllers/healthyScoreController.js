@@ -13,11 +13,15 @@ const healthyScoreController = {};
 // scores where higher is better
 healthyScoreController.calcHealthyScore = (req, res, next) => {
   console.log('Invoked healthyScoreController.calcHealthyScore', req.query);
-  const { walkscore, yelpgyms, yelprestaurants, iqairscore } = req.query;
+  const walkscore = Number(req.query.walkscore) || 0;
+  const restaurants = Number(req.query.yelprestaurants) || 1;
+  const gyms = Number(req.query.yelpgyms) || 0;
+  const airscore = Number(req.query.iqairscore) || 0;
+  console.log('new walkscore', walkscore);
   const healthyscore = Math.floor(
     0.4 * walkscore +
-      0.3 * Math.min(1, yelpgyms / yelprestaurants) * 100 +
-      0.3 * iqairscore
+      0.3 * Math.min(1, gyms / restaurants) * 100 +
+      0.3 * (1 - airscore / 500) * 100
   );
   res.locals.healthyscore = JSON.stringify(healthyscore);
   return next();
