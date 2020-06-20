@@ -84,7 +84,7 @@ class LongLatTest extends Component {
     return (
       <div className="iqAirScore">
         <img src="https://upload.wikimedia.org/wikipedia/en/7/79/IQAir_logo.png" width="100"></img>
-        <div>{`Air Score: ${iqAirData.data.current.pollution.aqius}`}</div>
+        <div>{`${iqAirData.data.current.pollution.aqius}`}</div>
       </div>
     );
   };

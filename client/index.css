@@ -73,3 +73,8 @@ body {
   padding-top: 20px;
 }
 
+.iqAirScore {
+  text-align: center;
+  font-size: 33px;
+  font-weight: bold;
+}
