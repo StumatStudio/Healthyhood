@@ -32,6 +32,7 @@ const initialState = {
   },
   isLoading: false,
   lastFetch: null,
+  initialLoad: true,
 };
 
 // Action Types
@@ -42,7 +43,7 @@ const YELP_DATA_RECEIVED = 'yelpDataReceived';
 const WALK_DATA_RECEIVED = 'walkDataReceived';
 const IQAIR_DATA_RECEIVED = 'iqAirDataReceived';
 const HEALTH_SCORE_RECEIVED = 'healthScoreReceived';
-const GROUP_API_STARTED = 'groupApiCallStarted';
+const TOGGLE_INITIAL_LOAD = 'toggleInitialLoad';
 
 // Action Creators
 export const dataRequest = createAction(DATA_REQUEST); // No payload, sets isLoading true
@@ -52,7 +53,7 @@ export const yelpDataReceived = createAction(YELP_DATA_RECEIVED); // requires ap
 export const walkDataReceived = createAction(WALK_DATA_RECEIVED); // requires apiData return as payload
 export const iqAirDataReceived = createAction(IQAIR_DATA_RECEIVED); // requires apiData return as payload
 export const healthScoreReceived = createAction(HEALTH_SCORE_RECEIVED); // requires score returned from sever as payload
-export const groupApiCallStarted = createAction(GROUP_API_STARTED); // no payload
+export const toggleInitialLoad = createAction(TOGGLE_INITIAL_LOAD); // no payload
 
 // Reducers
 const dataReducer = createReducer(initialState, {
@@ -63,7 +64,7 @@ const dataReducer = createReducer(initialState, {
   [WALK_DATA_RECEIVED]: walkDataReceivedCase,
   [IQAIR_DATA_RECEIVED]: iqAirDataReceivedCase,
   [HEALTH_SCORE_RECEIVED]: healthScoreReceivedCase,
-  [GROUP_API_STARTED]: groupApiCallStartedCase,
+  [TOGGLE_INITIAL_LOAD]: toggleInitialLoadCase,
 });
 
 // Reducer Cases
@@ -75,17 +76,18 @@ function dataRequestFailedCase(state, action) {
   state.isLoading = false;
 }
 
-function groupApiCallStartedCase(state, action) {
-  state.healthComputed = false;
-  state.healthScore = 0;
+function toggleInitialLoadCase(state, action) {
+  state.initialLoad = !state.initialLoad;
 }
 
 function updateUserLocationCase(state, action) {
+  console.log('in User Location', action.payload);
   let { lat, lng } = action.payload;
   lat = parseFloat(lat);
   lng = parseFloat(lng);
   const newUserLocObj = { lat, lng, isPrimary: true };
   state.userEnteredLocation = newUserLocObj;
+  state.initialLoad = false;
 }
 
 function yelpDataReceivedCase(state, action) {
@@ -118,6 +120,7 @@ function healthScoreReceivedCase(state, action) {
   state.healthScore = healthScore;
   state.healthComputed = true;
   state.isLoading = false;
+  state.initialLoad = false;
 }
 
 export default dataReducer;
