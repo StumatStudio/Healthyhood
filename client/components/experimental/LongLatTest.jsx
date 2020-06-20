@@ -14,8 +14,8 @@ class LongLatTest extends Form {
   */
   state = {
     data: {
-      lng: '',
-      lat: '',
+      lng: -118.470531,
+      lat: 33.987854,
     },
   }
 
@@ -64,10 +64,10 @@ class LongLatTest extends Form {
             <h5>Coordinates</h5>
             <div className="row">
               <div className="col">
-                {this.renderInput('lng', 'Enter Long:', 'text', 'Enter Long coords')}
+                {this.renderInput('lng', 'Enter Long:', 'text', '-118.470531')}
               </div>
               <div className="col">
-                {this.renderInput('lat', 'Enter Lat:', 'text', 'Enter Lat coords')}
+                {this.renderInput('lat', 'Enter Lat:', 'text', '33.987854')}
               </div>
             </div>
             <div>
