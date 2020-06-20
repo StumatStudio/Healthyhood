@@ -17,7 +17,6 @@ const getInitialLocation = () => {
 };
 
 const initialState = {
-
   yelpData: {},
   walkData: {},
   iqAirData: {},

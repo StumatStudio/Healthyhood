@@ -1,10 +1,11 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import { NavLink } from 'react-router-dom';
-import { UserContext } from './../../contexts/UserContext';
+import { connect } from 'react-redux';
+import { setIsLoggedIn } from '../../store/entities/userEntity';
 import './NavBar.css';
 
-const AuthenticatedUserDisplay = () => {
-  const { onLogoutClick } = useContext(UserContext);
+const AuthenticatedUserDisplay = ({ setIsLoggedIn }) => {
+  const onLogoutClick = () => setIsLoggedIn(false);
   return (
     <div className="db dtc-l v-mid w-100 w-75-l tc tr-l">
       <ul className="ul">
@@ -20,7 +21,7 @@ const AuthenticatedUserDisplay = () => {
         <li className="li">
           <NavLink
             exact
-            to="/logout"
+            to="/"
             className="link dim dark-gray pa3 f6 f6-l dib mr0 mr4-l pointer"
             onClick={onLogoutClick}
           >
@@ -32,4 +33,4 @@ const AuthenticatedUserDisplay = () => {
   );
 };
 
-export default AuthenticatedUserDisplay;
+export default connect(null, { setIsLoggedIn })(AuthenticatedUserDisplay);

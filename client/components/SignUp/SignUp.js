@@ -1,16 +1,34 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import { NavLink } from 'react-router-dom';
-import { UserContext } from './../../contexts/UserContext';
+import { connect } from 'react-redux';
+import {
+  setUsername,
+  setEmail,
+  setPassword,
+  updateUser,
+  setIsLoggedIn,
+} from '../../store/entities/userEntity';
 
-const SignUp = () => {
-  const {
-    // displayUserInformation, // when we have user information
-    setIsLoggedIn,
-    onUsernameChange,
-    onEmailChange,
-    onPasswordChange,
-    onRegisterSubmission,
-  } = useContext(UserContext);
+const SignUp = ({
+  users: { username, email, password },
+  setUsername,
+  setEmail,
+  setPassword,
+  updateUser,
+  setIsLoggedIn,
+}) => {
+  const onUsernameChange = event => setUsername(event.target.value);
+  const onEmailChange = event => setEmail(event.target.value);
+  const onPasswordChange = event => setPassword(event.target.value);
+  const onSignUpSubmission = () => {
+    updateUser({
+      username,
+      email,
+      password,
+      joinedon: new Date().toDateString(),
+    });
+    setIsLoggedIn(true);
+  };
 
   return (
     <main className="measure black-80 mv6 center shadow-4 pa5">
@@ -58,7 +76,7 @@ const SignUp = () => {
           exact
           to="/"
           className="b ph3 pv2 dib input-reset ba b--black bg-transparent grow pointer f6 no-underline"
-          onClick={onRegisterSubmission}
+          onClick={onSignUpSubmission}
         >
           Sign me up
         </NavLink>
@@ -67,4 +85,14 @@ const SignUp = () => {
   );
 };
 
-export default SignUp;
+const mapStateToProps = ({ users }) => ({ users });
+
+const mapDispatchToProps = {
+  setUsername,
+  setEmail,
+  setPassword,
+  updateUser,
+  setIsLoggedIn,
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(SignUp);
