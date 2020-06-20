@@ -1,15 +1,33 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import { NavLink } from 'react-router-dom';
-import { UserContext } from './../../contexts/UserContext';
+import { connect } from 'react-redux';
+import {
+  updateUser,
+  setIsLoggedIn,
+  setUsername,
+  setPassword,
+} from '../../store/entities/userEntity';
 
-const Login = () => {
-  const {
-    // displayUserInformation, // when we have user information
-    setIsLoggedIn,
-    onUsernameChange,
-    onPasswordChange,
-    onLoginSubmission,
-  } = useContext(UserContext);
+const Login = ({
+  users: { username, password },
+  updateUser,
+  setIsLoggedIn,
+  setUsername,
+  setPassword,
+}) => {
+  const onLoginSubmission = () => {
+    // This code needs to be updated when backend is ready
+    updateUser({
+      username,
+      password,
+      joinedon: new Date().toDateString(),
+    });
+    setIsLoggedIn(true);
+    
+  };
+
+  const onUsernameChange = event => setUsername(event.target.value);
+  const onPasswordChange = event => setPassword(event.target.value);
 
   return (
     <main className="measure black-80 mv6 center shadow-4 pa5">
@@ -66,4 +84,13 @@ const Login = () => {
   );
 };
 
-export default Login;
+const mapStateToProps = ({ users }) => ({ users });
+
+const mapDispatchToProps = {
+  updateUser,
+  setIsLoggedIn,
+  setUsername,
+  setPassword,
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Login);

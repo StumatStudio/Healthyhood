@@ -1,11 +1,12 @@
-import React, { useContext, useEffect } from 'react';
-import SignUpOrLogin from './SignUpOrLogin';
+import React from 'react';
+import { connect } from 'react-redux';
 import UserSection from './../UserSection/UserSection';
-import { UserContext } from './../../contexts/UserContext';
+import SignUpOrLogin from './SignUpOrLogin';
 
-const Home = () => {
-  const { isLoggedIn } = useContext(UserContext);
-  return <>{isLoggedIn ? <UserSection /> : <SignUpOrLogin />}</>;
-};
+const Home = ({ isLoggedIn }) => (
+  <>{isLoggedIn ? <UserSection /> : <SignUpOrLogin />}</>
+);
 
-export default Home;
+const mapStateToProps = ({ users: { isLoggedIn } }) => ({ isLoggedIn });
+
+export default connect(mapStateToProps)(Home);

@@ -1,25 +1,19 @@
-import React, { useContext } from 'react';
-import { connect } from 'react-redux';
-import { UserContext } from './../../contexts/UserContext';
-
+import React from 'react';
 import LongLatTest from './../experimental/LongLatTest';
 import NewerMapContainer from './../experimental/NewerMapContainer';
 import MapContainer2 from './../experimental/MapContainer2';
 import NewMapContainer from './../experimental/NewMapContainer';
+import { connect } from 'react-redux';
 import { usersRequest } from './../../store/entities/userEntity';
 
-const UserSection = props => {
-  const { user } = useContext(UserContext); // For later use when we have user info to display
-
+const UserSection = ({ users: { user }, usersRequest }) => {
   const handleClick = () => {
     console.log('inClick');
-    props.usersRequest('This is the action payload');
+    usersRequest('This is the action payload');
   };
-  console.log(props.currentUser);
-  console.log('loadFlag', props.currentUser.users.isLoading);
-
   return (
     <>
+      <h1>Hey, {user.username}, {user.email}, {user.password}, {user.joinedon}</h1>
       <p>Warning: Restricted Area</p>
       <h1>Hello STUMAT!!!</h1>
       <LongLatTest />
@@ -29,12 +23,6 @@ const UserSection = props => {
   );
 };
 
-const mapStateToProps = state => ({
-  currentUser: state,
-});
+const mapStateToProps = ({ users }) => ({ users });
 
-const mapDispatchToProps = dispatch => ({
-  usersRequest: payload => dispatch(usersRequest(payload)),
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(UserSection);
+export default connect(mapStateToProps, { usersRequest })(UserSection);

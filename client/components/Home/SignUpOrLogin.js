@@ -1,7 +1,7 @@
-import React, { useContext } from 'react';
+import React from 'react';
+import { connect } from 'react-redux';
 import SignUp from './../SignUp/SignUp';
 import Login from './../Login/Login';
-import { UserContext } from './../../contexts/UserContext';
 
 /**
  * On the home screen/webpage, when the user is not logged in, <Home />
@@ -9,9 +9,10 @@ import { UserContext } from './../../contexts/UserContext';
  * or Login button is clicked (which would toggle the wantToSignUp state).
  */
 
-const SignUpOrLogin = () => {
-  const { wantToSignUp } = useContext(UserContext);
-  return <>{wantToSignUp ? <SignUp /> : <Login />}</>;
-};
+const SignUpOrLogin = ({ wantToSignUp }) => (
+  <>{wantToSignUp ? <SignUp /> : <Login />}</>
+);
 
-export default SignUpOrLogin;
+const mapStateToProps = ({ users: { wantToSignUp } }) => ({ wantToSignUp });
+
+export default connect(mapStateToProps)(SignUpOrLogin);
