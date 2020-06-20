@@ -60,6 +60,16 @@ class LongLatTest extends Component {
     getHealthScore(secretSauceObj);
   }
 
+  displayYelpScore = (restaurants, gyms) => {
+    return (
+      <div className="yelpsdatacontainer">
+        <img src="http://assets.stickpng.com/images/5842f092a6515b1e0ad75b17.png" width="80"></img>
+        <div>{`Restaurants: ${restaurants.total}`}</div>
+        <div>{`Gyms: ${gyms.total}`}</div>
+      </div>
+    );
+  };
+
   displayWalkScore = (walkData) => {
     return (
       <img
@@ -70,22 +80,27 @@ class LongLatTest extends Component {
     );
   };
 
+  displayIqAirScore = (iqAirData) => {
+    return (
+      <div className="iqAirScore">
+        <img src="https://upload.wikimedia.org/wikipedia/en/7/79/IQAir_logo.png" width="100"></img>
+        <div>{`Air Score: ${iqAirData.data.current.pollution.aqius}`}</div>
+      </div>
+    );
+  };
+
   render() {
     const { yelpData, walkData, iqAirData, healthScore, healthComputed, initialLoad } = this.props.map;
     const { restaurants, gyms } = yelpData;
 
     return (
       <div className="latlongcontainer">
-        <div className='healthscorecontainer'>
+        <div className='healthyscorecontainer'>
           <div className="healthyhoodscore">{!initialLoad && healthComputed && `Healthyhood Score: ${healthScore}`}</div>
-          <div className="healthyscoredetails">
-            <div className="yelpdatacontainer">
-              <img src="http://assets.stickpng.com/images/5842f092a6515b1e0ad75b17.png" width="100"></img>
-              <div>{!initialLoad && restaurants && `Restaurants: ${restaurants.total}`}</div>
-              <div>{!initialLoad && gyms && `Gyms: ${gyms.total}`}</div>
-            </div>
-            <div>{!initialLoad && walkData.walkscore && this.displayWalkScore(walkData)}</div>
-            <div>{!initialLoad && iqAirData.data && `Air Score: ${iqAirData.data.current.pollution.aqius}`}</div>
+          <div className="healthyscoredetailscontainer">
+            <div className="yelpscoredetail">{!initialLoad && restaurants && gyms && this.displayYelpScore(restaurants, gyms)}</div>
+            <div className="walkscoredetail">{!initialLoad && walkData.walkscore && this.displayWalkScore(walkData)}</div>
+            <div className="iqairscoredetail">{!initialLoad && iqAirData.data && this.displayIqAirScore(iqAirData)}</div>
           </div>
         </div>
 
