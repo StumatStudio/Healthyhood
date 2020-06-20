@@ -51,11 +51,14 @@ const apiCall = ({ dispatch, getState }) => next => async action => {
     // For Dev Tools to track success
     dispatch(apiCallSuccess(response.data)); // axios returns an object with a data prop
 
-    // Pass succcessful resonse data to slice success action for updating state
+    // On successful API call dispatch action labeled as the success action passing response data as payload
     if (onSuccess)
-      dispatch({
+      return dispatch({
         type: onSuccess,
-        payload: { data: response.data, headers: response.headers },
+        payload: {
+          data: response.data,
+          headers: response.headers,
+        },
       });
   } catch (err) {
     // For Dev tools / displaying error to client
