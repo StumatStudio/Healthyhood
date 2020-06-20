@@ -12,14 +12,10 @@ const UserSection = ({ users: { user }, usersRequest }) => {
     usersRequest('This is the action payload');
   };
   return (
-    <>
-      <h1>Hey, {user.username}, {user.email}, {user.password}, {user.joinedon}</h1>
-      <p>Warning: Restricted Area</p>
-      <h1>Hello STUMAT!!!</h1>
+    <div className="mapcontainer">
       <LongLatTest />
       <NewerMapContainer />
-      <button onClick={handleClick}>Click Me</button>
-    </>
+    </div>
   );
 };
 

@@ -1,11 +1,53 @@
 body {
   /*font-family: 'Roboto Mono', monospace;*/
   /*font-family: 'DM Mono', monospace;*/
-  font-family: 'Press Start 2P', cursive;
+  font-family: 'Sintony', sans-serif;
   background: linear-gradient(90deg, #FFDFDF 0%, #CDECFF 100%); 
   /*background: black*/
 }
 
 .row {
   background-color: white;
+}
+
+#react-google-places-autocomplete-input {
+  width: 600px;
+}
+
+.google-places-autocomplete__suggestions-container {
+  color: red;
+}
+
+.google-places-autocomplete__suggestion {
+  background: black;
+}
+.google-places-autocomplete__suggestion:hover {
+  background: yellow;
+}
+
+.mapcontainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.latlongcontainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.mapcontrolcontainer {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  margin-bottom: 20px;
+}
+
+.healthyscoredetails {
+  display: flex;
+  flex-direction: flex;
+  justify-content: space-evenly;
+  margin: 0px 10px;
 }

@@ -10,7 +10,7 @@ import {
 
 const containerStyle = {
   width: '800px',
-  height: '800px',
+  height: '500px',
 };
 
 function MyComponent() {
@@ -138,7 +138,7 @@ function MyComponent() {
     <GoogleMap
       mapContainerStyle={containerStyle}
       center={mapCenter}
-      zoom={15}
+      zoom={14}
       onLoad={onLoad}
       onUnmount={onUnmount}
       // onCenterChanged={() => callApis()}
