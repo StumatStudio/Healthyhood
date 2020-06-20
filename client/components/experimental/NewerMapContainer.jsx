@@ -1,6 +1,12 @@
 import React from 'react';
-import { GoogleMap, LoadScript, Marker } from '@react-google-maps/api';
-import { useSelector } from 'react-redux';
+import { GoogleMap, Marker } from '@react-google-maps/api';
+import { useSelector, useDispatch } from 'react-redux';
+import {
+  getYelpData,
+  getWalkData,
+  getIqAirData,
+  getHealthScore,
+} from '../../store/entities/mapEntity';
 
 const containerStyle = {
   width: '800px',
@@ -16,11 +22,14 @@ function MyComponent() {
     iqAirData,
     autoLocation,
     userEnteredLocation,
+    initialLoad,
   } = useSelector(state => state.map);
   const { restaurants, gyms } = yelpData;
 
+  const dispatch = useDispatch();
+
   // console.log('userLoc', userEnteredLocation);
-  // console.log('yelp', yelpData);
+  console.log('yelp1', yelpData);
   // console.log('walk', walkData);
 
   const mapCenter = userEnteredLocation.isPrimary
@@ -38,6 +47,51 @@ function MyComponent() {
     setMap(null);
   }, []);
 
+  const getNewState = () => {
+    return {
+      yelpData,
+      walkData,
+      iqAirData,
+    };
+  };
+
+  // const callApis = async () => {
+  //   if (initialLoad) return;
+
+  //   console.log('calling HealthScore Apis');
+  //   console.log('yelp0', initialLoad);
+  //   try {
+  //     const secretSauce = await Promise.all([
+  //       dispatch(getYelpData(userEnteredLocation)),
+  //       dispatch(getWalkData(userEnteredLocation)),
+  //       dispatch(getIqAirData(userEnteredLocation)),
+  //     ]);
+  //   } catch (e) {
+  //     console.log(e.message);
+  //   }
+  //   // This is using the stored state from when this function was called.
+  //   // We need to get the updated state AFTER apis have finished.
+  //   console.log('newState', getNewState());
+  //   const {
+  //     yelpData: newYelp,
+  //     walkData: newWalk,
+  //     iqAirData: newAir,
+  //   } = getNewState();
+  //   const { gyms: newGyms, restaurants: newRest } = newYelp;
+
+  //   const secretSauceObj = {
+  //     yelpGyms: newGyms.total,
+  //     yelpRestaurants: newRest.total,
+  //     walkScore: newWalk.walkscore,
+  //     iqAirScore: newAir.data.current.pollution.aqius,
+  //   };
+
+  //   dispatch(getHealthScore(secretSauceObj));
+  // };
+
+
+
+
   // Choose marker icons via this object
   const markerTypes = {
     blue: 'http://maps.google.com/mapfiles/ms/icons/blue-dot.png',
@@ -46,6 +100,7 @@ function MyComponent() {
     yellow: 'http://maps.google.com/mapfiles/ms/icons/yellow-dot.png',
     purple: 'http://maps.google.com/mapfiles/ms/icons/purple-dot.png',
   };
+
 
   const createMarker = (busnObj, idx, type) => {
     const { coordinates, name } = busnObj;
@@ -80,29 +135,28 @@ function MyComponent() {
   ];
 
   return (
-    <LoadScript googleMapsApiKey={process.env.GMAPS_KEY}>
-      <GoogleMap
-        mapContainerStyle={containerStyle}
-        center={mapCenter}
-        zoom={15}
-        onLoad={onLoad}
-        onUnmount={onUnmount}
-        options={{
-          styles: myStyles,
-        }}
-      >
-        {/* Child components, such as markers, info windows, etc. */}
-        <Marker position={mapCenter} title={'Your Location'} />
-        {restaurants &&
-          restaurants.businesses.map((busnObj, idx) =>
-            createMarker(busnObj, idx, 'rest')
-          )}
-        {gyms &&
-          gyms.businesses.map((busnObj, idx) =>
-            createMarker(busnObj, idx, 'gym')
-          )}
-      </GoogleMap>
-    </LoadScript>
+    <GoogleMap
+      mapContainerStyle={containerStyle}
+      center={mapCenter}
+      zoom={15}
+      onLoad={onLoad}
+      onUnmount={onUnmount}
+      // onCenterChanged={() => callApis()}
+      options={{
+        styles: myStyles,
+      }}
+    >
+      {/* Child components, such as markers, info windows, etc. */}
+      <Marker position={mapCenter} title={'Your Location'} />
+      {restaurants &&
+        restaurants.businesses.map((busnObj, idx) =>
+          createMarker(busnObj, idx, 'rest')
+        )}
+      {gyms &&
+        gyms.businesses.map((busnObj, idx) =>
+          createMarker(busnObj, idx, 'gym')
+        )}
+    </GoogleMap>
   );
 }
 
