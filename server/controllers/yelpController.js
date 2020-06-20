@@ -74,29 +74,9 @@ yelpController.businessSearch = (req, res, next) => {
         },
       })
     );
-
-  // fetch(URL, {
-  //   method: 'GET',
-  //   headers: {
-  //     Authorization: `Bearer ${process.env.YELP_KEY}`,
-  //   },
-  // })
-  //   .then(response => response.json())
-  //   .then(data => {
-  //     res.locals.business.gyms = data;
-  //     return next();
-  //   })
-  //   .catch(error =>
-  //     next({
-  //       message: 'Error in yelpController.businessSearch',
-  //       serverMessage: {
-  //         err: error,
-  //       },
-  //     })
-  //   );
 };
 
-// Yelp Bussiness Details
+// Yelp Business Details
 //    Returns details about the business given its id
 // Required parameters:
 //    id: business id

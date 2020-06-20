@@ -1,7 +1,7 @@
 import React, { createContext, useState } from 'react';
 export const UserContext = createContext();
 
-const UserContextProvider = props => {
+const UserContextProvider = ({ children }) => {
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -68,7 +68,7 @@ const UserContextProvider = props => {
         onLoginSubmission,
       }}
     >
-      {props.children}
+      {children}
     </UserContext.Provider>
   );
 };

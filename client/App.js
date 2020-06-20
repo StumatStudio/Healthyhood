@@ -15,7 +15,7 @@ const App = () => (
       <ComponentsRouting />
     </UserContextProvider>
     <Footer />
-    {/* *****************/}
+    {/*******************/}
     <BackgroundAnimation />
   </>
 );
