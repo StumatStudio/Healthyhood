@@ -21,7 +21,7 @@ module.exports = app => {
   app.use(`${baseUrl}/walkscore`, walkScore);
   app.use(`${baseUrl}/yelp`, yelp);
   app.use(`${baseUrl}/iqair`, iqAir);
-  app.use(`${baseUrl}/crime`, crime);
+  // app.use(`${baseUrl}/crime`, crime);
   app.use(`${baseUrl}/healthyscore`, healthyScore);
 
   // app.get(`${baseUrl}/nope`, (req, res) => {
