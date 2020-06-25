@@ -2,7 +2,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 require('dotenv').config();
 
-const errorMiddle = require('../server/middleware/errorHandling');
+const errorMiddle = require('./middleware/errorHandling');
 
 const app = express();
 const PORT = process.env.PORT || 3000;

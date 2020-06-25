@@ -14,7 +14,7 @@ This module retuns a function that, when called attaches
 all of the routes within to the app object passed in
 */
 
-module.exports = app => {
+module.exports = (app) => {
   // Traditional Routes
   app.use(`${baseUrl}/users`, users);
   app.use(`${baseUrl}/walkscore`, walkScore);
@@ -28,10 +28,10 @@ module.exports = app => {
 
   // Static files
   if (process.env.NODE_ENV !== 'development') {
-    app.use('/dist', express.static(path.join(__dirname, '../../dist')));
+    app.use('/dist', express.static(path.join(__dirname, '..', '..', 'client', 'dist')));
 
     app.get('/', (req, res) => {
-      res.sendFile(path.join(__dirname, '../../dist/index.html'));
+      res.sendFile(path.join(__dirname, '..', '..', 'client', 'dist', 'index.html'));
     });
   }
 

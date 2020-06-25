@@ -11,8 +11,8 @@ const iqAirController = {};
 // Further information on other parameters and response:
 // https://www.walkscore.com/professional/api.php
 iqAirController.getIqAirScore = (req, res, next) => {
-  console.log('Invoked iqAirController.getIqAirScore', req.query);
   const { lat, lon } = req.query;
+  
   const API_URL = 'https://api.airvisual.com/v2/nearest_city';
   const params = `key=${process.env.IQAIR_KEY}`;
   const URL = `${API_URL}?${params}&lat=${lat}&lon=${lon}`;
