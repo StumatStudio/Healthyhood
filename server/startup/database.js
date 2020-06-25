@@ -16,6 +16,6 @@ module.exports = () => {
       useUnifiedTopology: true,
       dbName: 'healthyhood',
     })
-    .then(() => console.log('Connected to Mongo DB: healthyhood'))
+    .then(() => console.log('Connected to Mongo DB: UrbanSherpa'))
     .catch(err => console.log(`Error occurred in mongoose.connect: ${err}`));
 };

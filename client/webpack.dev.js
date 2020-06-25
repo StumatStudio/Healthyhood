@@ -5,14 +5,14 @@ const common = require('./webpack.common');
 
 module.exports = merge(common, {
   mode: 'development',
-  entry: './client/index.js',
+  entry: './index.js',
   output: {
     filename: '[name].[contentHash]-bundle.js',
     path: path.resolve(__dirname, 'dist'),
   },
   plugins: [
     new HtmlWebpackPlugin({
-      template: './client/index.html',
+      template: './index.html',
     }),
   ],
   module: {

@@ -4,8 +4,8 @@ const Dotenv = require('dotenv-webpack');
 
 module.exports = {
   entry: {
-    main: './client/index.js',
-    // vendor: "./client/vendor.js"
+    main: './index.js',
+   
   },
   module: {
     rules: [
