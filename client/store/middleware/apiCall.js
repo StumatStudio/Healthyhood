@@ -13,8 +13,8 @@ Boilerplate API Call action payload:
 }
 */
 
-/* 
-If we're here, THUNK has called an action creator that created an 
+/*
+If we're here, THUNK has called an action creator that created an
 API action. I believe middleware are functions that redux automatically
 runs under the hood passing certain parameters via currying. These are run
 after an action is dispatched and before reducers are called. Each middleware
@@ -22,20 +22,30 @@ NEEDS three parameters, the a synthetic store obj (with dispatch and getstate me
 the next middle/reducer to be called, AND the action that was dispached
 */
 
-const apiCall = ({ dispatch, getState }) => next => async action => {
+// Get state also available along with dispatch in destructured argument
+const apiCall = ({ dispatch }) => next => async action => {
   // Call next middleware / reducer if not an api action
   if (action.type !== apiActions.apiCallRequested.type) return next(action);
 
   // If we're here we dispatched an apiCAllRequestedAction
   const baseUrl = process.env.BASE_URL;
-  const { apiCallFailed, apiCallRequested, apiCallSuccess } = apiActions;
-  const { url, method, data, onStart, onSuccess, onError } = action.payload;
+  const { apiCallFailed, apiCallSuccess } = apiActions;
+  const {
+    url,
+    method,
+    data,
+    onStart,
+    onSuccess,
+    startPayload,
+    onError,
+    errorPayload,
+  } = action.payload;
 
   // Send current action through to DevTools so we can track it if needed
   next(action);
 
   // Dispatch specified API call start action
-  dispatch({ type: onStart });
+  dispatch({ type: onStart, payload: startPayload });
 
   // Execute API call
   try {
@@ -51,8 +61,8 @@ const apiCall = ({ dispatch, getState }) => next => async action => {
     // For Dev Tools to track success
     dispatch(apiCallSuccess(response.data)); // axios returns an object with a data prop
 
-    // On successful API call dispatch action labeled as the success action passing response data as payload
-    if (onSuccess)
+    // On successful APIcall dispatch success action passing response data as payload
+    if (onSuccess) {
       return dispatch({
         type: onSuccess,
         payload: {
@@ -60,12 +70,18 @@ const apiCall = ({ dispatch, getState }) => next => async action => {
           headers: response.headers,
         },
       });
+    }
   } catch (err) {
     // For Dev tools / displaying error to client
     dispatch(apiCallFailed(err.response.data)); // This syntax is axios specific
 
     // To notify slice if onError specified
-    if (onError) dispatch({ type: onError, payload: err.response.data });
+    if (onError) {
+      dispatch({
+        type: onError,
+        payload: { err: err.response.data, reducerPayload: errorPayload },
+      });
+    }
   }
 };
 
