@@ -10,16 +10,16 @@ import {
 } from '../../store/entities/userEntity';
 
 const SignUp = ({
-  users: { username, email, password },
+  users: { email, username, password },
   setUsername,
   setEmail,
   setPassword,
   updateUser,
   setIsLoggedIn,
 }) => {
-  const onUsernameChange = event => setUsername(event.target.value);
-  const onEmailChange = event => setEmail(event.target.value);
-  const onPasswordChange = event => setPassword(event.target.value);
+  const onUsernameChange = (event) => setUsername(event.target.value);
+  const onEmailChange = (event) => setEmail(event.target.value);
+  const onPasswordChange = (event) => setPassword(event.target.value);
   const onSignUpSubmission = () => {
     updateUser({
       username,
@@ -39,7 +39,7 @@ const SignUp = ({
             Username
           </label>
           <input
-            className="pa2 w-100 hover-white input-reset hover-bg-black ba bg-transparent f7"
+            className="pa2 w-100 hover-black input-reset hover-bg-white ba bg-transparent f7"
             type="text"
             name="name"
             id="name"
@@ -51,7 +51,7 @@ const SignUp = ({
             Email Address
           </label>
           <input
-            className="pa2 w-100 hover-white input-reset hover-bg-black ba bg-transparent f7"
+            className="pa2 w-100 hover-black input-reset hover-bg-white ba bg-transparent f7"
             type="email"
             name="email-address"
             id="email-address"
@@ -63,7 +63,7 @@ const SignUp = ({
             Password
           </label>
           <input
-            className="b pa2 w-100 hover-white input-reset hover-bg-black ba bg-transparent f7"
+            className="b pa2 w-100 hover-black input-reset hover-bg-white ba bg-transparent f7"
             type="password"
             name="password"
             id="password"
@@ -80,6 +80,11 @@ const SignUp = ({
         >
           Sign me up
         </NavLink>
+      </div>
+      <div className="lh-copy mt3">
+        <a href="/login" className="f7 link dim black db">
+          Already signed up? Login instead.
+        </a>
       </div>
     </main>
   );

@@ -25,8 +25,8 @@ const Login = ({
     setIsLoggedIn(true);
   };
 
-  const onUsernameChange = event => setUsername(event.target.value);
-  const onPasswordChange = event => setPassword(event.target.value);
+  const onUsernameChange = (event) => setUsername(event.target.value);
+  const onPasswordChange = (event) => setPassword(event.target.value);
 
   return (
     <main className="measure black-80 mv6 center shadow-4 pa5">
@@ -71,7 +71,7 @@ const Login = ({
         </NavLink>
       </div>
       <div className="lh-copy mt3">
-        <a href="#0" className="f7 link dim black db">
+        <a href="/signup" className="f7 link dim black db">
           Sign up instead?
         </a>
 

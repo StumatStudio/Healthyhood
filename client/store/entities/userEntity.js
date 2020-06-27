@@ -13,7 +13,7 @@ const initialState = {
   email: '',
   password: '',
   isLoggedIn: false,
-  wantToSignUp: true,
+  defaultToSignUp: false,
   user: {
     username: '',
     email: '',
@@ -128,7 +128,7 @@ function updateUserCase(state, action) {
 export default usersReducer;
 
 /*
-Most of the time we user action creators to return objects. We dispatch the
+Most of the time we use action creators to return objects. We dispatch the
 objects returned by action creators to our reducers to update state. Sometimes 
 we want to execute logic though and we can't do that with simple action creators and
 the objects they return. 
@@ -149,7 +149,7 @@ const usersUrl = '/whateverTheBackendNeeds';
 const loginUrl = '/whateverTheBackendNeeds';
 
 // Returns function that, when called creates an API action object with the following payload
-export const login = loginObj =>
+export const login = (loginObj) =>
   apiCallRequested({
     url: loginUrl,
     method: 'post',
