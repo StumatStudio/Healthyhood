@@ -9,6 +9,8 @@
   transform-origin: 40px 18px;
   animation: loader__wheel--spin 1.2s linear infinite;
 }
+
+/* inserts white space with blk background after content of div element */
 .loader__wheel--spin div:after {
   content: ' ';
   display: block;

@@ -14,6 +14,7 @@ import {
   toggleInitialLoad,
 } from '../../store/entities/mapEntity';
 import WheelLoader from '../common/experimental/WheelLoader/WheelLoader';
+import SphereLoader from '../common/experimental/SphereLoader/SphereLoader';
 
 class LongLatTest extends Component {
   /*
@@ -139,7 +140,7 @@ class LongLatTest extends Component {
                 this.displayYelpScore(restaurants, gyms)}
             </div>
             <div className="walkscoredetail">
-              {walkLoading && <WheelLoader />}
+              {walkLoading && <SphereLoader />}
               {!initialLoad &&
                 walkData.walkscore &&
                 this.displayWalkScore(walkData)}
