@@ -25,8 +25,13 @@ const Login = ({
     setIsLoggedIn(true);
   };
 
-  const onUsernameChange = (event) => setUsername(event.target.value);
-  const onPasswordChange = (event) => setPassword(event.target.value);
+  const onUsernameChange = (event) => {
+    return setUsername(event.target.value);
+  };
+  
+  const onPasswordChange = (event) => {
+    return setPassword(event.target.value);
+  };
 
   return (
     <main className="measure black-80 mv6 center shadow-4 pa5">
