@@ -1,6 +1,7 @@
 const express = require('express');
 const path = require('path');
 
+const userRoutes = require('../routes/userRoutes');
 const walkScore = require('../routes/walkScore');
 const yelp = require('../routes/yelp');
 const iqAir = require('../routes/iqAir');
@@ -15,6 +16,7 @@ all of the routes within to the app object passed in
 
 module.exports = (app) => {
   // Traditional Routes
+  app.use(`${baseUrl}/user`, userRoutes);
   app.use(`${baseUrl}/walkscore`, walkScore);
   app.use(`${baseUrl}/yelp`, yelp);
   app.use(`${baseUrl}/iqair`, iqAir);
