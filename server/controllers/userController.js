@@ -4,7 +4,6 @@ const jwt = require('jsonwebtoken');
 const pool = require('../database');
 
 const bcryptSaltRounds = 10;
-const JWTSecret = 's5bOY3bOa2DEJGMIKe6G';
 
 // ----------------
 // Helper functions
@@ -49,9 +48,10 @@ const validatePassword = (password) => {
 // -- That email and password should already be validated on the front end...
 // ...but will be validated again on the backend
 //
-// Response will return a object:
+// Response will return a object and a JWT in a cookie:
 // -- If the objects error key is not empty, you know there's an error and can read the message
 // -- Otherwise the data key will contain the user info that was added to the db
+// -- JWT will contain the user email in the payload
 
 const register = async (req, res) => {
   try {
@@ -84,7 +84,7 @@ const register = async (req, res) => {
 
     // Create a JWT
     const payload = { email };
-    const token = jwt.sign(payload, JWTSecret, { expiresIn: '1h' });
+    const token = jwt.sign(payload, process.env.JWTSECRET, { expiresIn: '1h' });
 
     return res
       .cookie('token', token, { httpOnly: true })
