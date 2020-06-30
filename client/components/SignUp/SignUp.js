@@ -6,40 +6,153 @@ import {
   setEmail,
   setPassword,
   updateUser,
+  updateErrors,
   setIsLoggedIn,
 } from '../../store/entities/userEntity';
+import './SignUp.css';
 
 const SignUp = ({
-  users: { username, email, password },
+  user: { username, email, password },
   setUsername,
   setEmail,
   setPassword,
   updateUser,
+  updateErrors,
   setIsLoggedIn,
+  errors,
 }) => {
-  const onUsernameChange = event => setUsername(event.target.value);
-  const onEmailChange = event => setEmail(event.target.value);
-  const onPasswordChange = event => setPassword(event.target.value);
+  /*
+  displayer takes two required arguments as inputs:
+  1) a message string, and
+  2) a target tag (as a string).
+  It displays that message in the target tag.
+  Accommodates any HTML tags inside the message string
+  */
+  const displayer = (target, message) => {
+    document.querySelector(target).innerHTML = message;
+  };
+
+  /*
+  listifyArray takes an array as the first argument, and an optional boolean second argument. When no second argument is provided, the function returns an unordered list with all elements from array as list items. If the second argument is true, it returns an ordered list instead.
+  */
+  const listifyArray = (array, ordered = false) => {
+    let listify = '';
+    if (array.length > 0) {
+      for (let i = 0; i < array.length; i++) {
+        listify += '<li>' + array[i] + '</li>';
+      }
+      if (ordered) {
+        listify = '<ol>' + listify + '</ol>';
+      } else {
+        listify = '<ul>' + listify + '</ul>';
+      }
+    }
+    return listify;
+  };
+
+  const onUsernameChange = (event) => {
+    displayer('#usernameErrors', ''); //clear the #usernameErrors div when typing
+    const current = event.target.value;
+    const errorsList = [];
+
+    if (current.length === 0) {
+      errorsList.push('Username is required');
+    } else if (current.length < 4) {
+      errorsList.push('Username must be 4 or more characters');
+    }
+    if (Number(current[0]) == current[0]) {
+      errorsList.push('Username cannot start with a number');
+    }
+    if (current.length > 10) {
+      errorsList.push('Username cannot be more than 10 characters');
+    }
+
+    updateErrors({
+      ...errors,
+      username: errorsList,
+    });
+
+    setUsername(current);
+  };
+
+  const onEmailChange = (event) => {
+    displayer('#emailErrors', ''); //clear the #emailErrors div when typing
+    const current = event.target.value;
+    const errorsList = [];
+
+    if (current.length === 0) {
+      errorsList.push('Email is required');
+    } else if (current.length < 5) {
+      errorsList.push('Email must be 5 or more characters');
+    }
+    // if (current.length > 20) {
+    //   errorsList.push('Email cannot be more than 20 characters');
+    // }
+
+    updateErrors({
+      ...errors,
+      email: errorsList,
+    });
+
+    setEmail(current);
+  };
+
+  const onPasswordChange = (event) => {
+    displayer('#passwordErrors', ''); //clear the #passwordErrors div when typing
+    const current = event.target.value;
+    const errorsList = [];
+
+    if (current.length === 0) {
+      errorsList.push('Password is required');
+    } else if (current.length < 8) {
+      errorsList.push('Password must be 8 or more characters');
+    }
+    // if (current.length > 10) {
+    //   errorsList.push('Password cannot be more than 10 characters');
+    // }
+
+    updateErrors({
+      ...errors,
+      password: errorsList,
+    });
+
+    setPassword(current);
+  };
+
   const onSignUpSubmission = () => {
+    let errorsCount =
+      errors.username.length + errors.email.length + errors.password.length;
+    if (errorsCount > 0) {
+      displayer('#usernameErrors', listifyArray(errors.username));
+      displayer('#emailErrors', listifyArray(errors.email));
+      displayer('#passwordErrors', listifyArray(errors.password));
+    }
+
     updateUser({
       username,
       email,
       password,
       joinedon: new Date().toDateString(),
     });
-    setIsLoggedIn(true);
+
+    //switches page to UserSection component when isLoggedIn is set to true
+    if (errorsCount === 0) setIsLoggedIn(true);
   };
 
   return (
     <main className="measure black-80 mv6 center shadow-4 pa5">
       <fieldset id="sign_up" className="ba b--transparent ph0 mh0">
+        <div className="errors" id="usernameErrors"></div>
+        <div className="errors" id="emailErrors"></div>
+        <div className="errors" id="passwordErrors"></div>
+
         <legend className="ph0 mh0 fw6 f4">Sign Up</legend>
         <div className="mt3">
           <label className="db fw4 lh-copy f6" htmlFor="name">
             Username
           </label>
           <input
-            className="pa2 w-100 hover-white input-reset hover-bg-black ba bg-transparent f7"
+            className="pa2 w-100 hover-black input-reset hover-bg-white ba bg-transparent f7"
             type="text"
             name="name"
             id="name"
@@ -51,7 +164,7 @@ const SignUp = ({
             Email Address
           </label>
           <input
-            className="pa2 w-100 hover-white input-reset hover-bg-black ba bg-transparent f7"
+            className="pa2 w-100 hover-black input-reset hover-bg-white ba bg-transparent f7"
             type="email"
             name="email-address"
             id="email-address"
@@ -63,7 +176,7 @@ const SignUp = ({
             Password
           </label>
           <input
-            className="b pa2 w-100 hover-white input-reset hover-bg-black ba bg-transparent f7"
+            className="b pa2 w-100 hover-black input-reset hover-bg-white ba bg-transparent f7"
             type="password"
             name="password"
             id="password"
@@ -81,17 +194,26 @@ const SignUp = ({
           Sign me up
         </NavLink>
       </div>
+      <div className="lh-copy mt3">
+        <a href="/login" className="f7 link dim black db">
+          Already signed up? Login instead.
+        </a>
+      </div>
     </main>
   );
 };
 
-const mapStateToProps = ({ users }) => ({ users });
+const mapStateToProps = (state) => ({
+  user: state.users,
+  errors: state.users.errors,
+});
 
 const mapDispatchToProps = {
   setUsername,
   setEmail,
   setPassword,
   updateUser,
+  updateErrors,
   setIsLoggedIn,
 };
 
