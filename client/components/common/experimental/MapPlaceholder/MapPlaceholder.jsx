@@ -6,8 +6,8 @@ const MapPlaceholder = () => (
     <div className="mapPlace__img-container mapPlace--loading">
       <div className="mapPlace__mapSatBar mapPlace--loading" />
       <div className="mapPlace__fullScreenBox mapPlace--loading" />
-      <div className="mapPlace__streetViewBox mapPlace--loading" />
       <div className="mapPlace__zoomBar mapPlace--loading" />
+      <div className="mapPlace__streetViewBox mapPlace--loading" />
     </div>
   </div>
 );

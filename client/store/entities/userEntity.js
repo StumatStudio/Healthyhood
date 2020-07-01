@@ -13,12 +13,17 @@ const initialState = {
   email: '',
   password: '',
   isLoggedIn: false,
-  wantToSignUp: true,
+  defaultToSignUp: true,
   user: {
     username: '',
     email: '',
     password: '',
     joinedon: '',
+  },
+  errors: {
+    username: ['Username is required'],
+    email: ['Email is required'],
+    password: ['Password is required'],
   },
 };
 
@@ -36,6 +41,7 @@ const SET_USERNAME = 'setUsername';
 const SET_EMAIL = 'setEmail';
 const SET_PASSWORD = 'setPassword';
 const UPDATE_USER = 'updateUser';
+const UPDATE_ERRORS = 'updateErrors';
 
 /*
 Create action is part of Reduxjs toolkit and will automatically create
@@ -61,6 +67,7 @@ export const setUsername = createAction(SET_USERNAME);
 export const setEmail = createAction(SET_EMAIL);
 export const setPassword = createAction(SET_PASSWORD);
 export const updateUser = createAction(UPDATE_USER);
+export const updateErrors = createAction(UPDATE_ERRORS);
 /*
 Create reducer is a redux toolkit function that maps function definitions
 to action types and returns a single reducer for export.
@@ -79,6 +86,7 @@ const usersReducer = createReducer(initialState, {
   [SET_EMAIL]: setEmailCase,
   [SET_PASSWORD]: setPasswordCase,
   [UPDATE_USER]: updateUserCase,
+  [UPDATE_ERRORS]: updateErrorsCase,
 });
 
 // Reducer Cases
@@ -125,10 +133,14 @@ function updateUserCase(state, action) {
   state.user = { ...resetUser, ...action.payload };
 }
 
+function updateErrorsCase(state, action) {
+  state.errors = { ...action.payload };
+}
+
 export default usersReducer;
 
 /*
-Most of the time we user action creators to return objects. We dispatch the
+Most of the time we use action creators to return objects. We dispatch the
 objects returned by action creators to our reducers to update state. Sometimes 
 we want to execute logic though and we can't do that with simple action creators and
 the objects they return. 
@@ -149,7 +161,7 @@ const usersUrl = '/whateverTheBackendNeeds';
 const loginUrl = '/whateverTheBackendNeeds';
 
 // Returns function that, when called creates an API action object with the following payload
-export const login = loginObj =>
+export const login = (loginObj) =>
   apiCallRequested({
     url: loginUrl,
     method: 'post',
