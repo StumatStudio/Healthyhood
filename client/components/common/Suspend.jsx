@@ -95,31 +95,3 @@ Suspend.propTypes = {
     PropTypes.arrayOf(PropTypes.element),
   ]).isRequired,
 };
-
-/*
-    const delay = initialDelay;
-    let delayedTimeout = null;
-    if (condition) {
-      if (initialDelay) {
-        delayedTimeout = setTimeout(() => {
-          setComponent([children]);
-        }, delay);
-      } else {
-        setComponent([children]);
-      }
-      setIsChecked(true); // half of the magic for data that needs only render once
-    } else {
-      const tempComponent = [];
-      const placeholdersToRender = multiplier;
-      for (let i = 0; i < placeholdersToRender; i += 1) {
-        tempComponent.push(<Placeholder key={i} />);
-      }
-      setComponent(tempComponent);
-    }
-    return () => {
-      if (delayedTimeout) {
-        clearTimeout(delayedTimeout);
-      }
-    };
-  }, [condition, children]);
-*/
