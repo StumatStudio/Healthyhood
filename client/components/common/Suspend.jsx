@@ -12,6 +12,7 @@ children: Wrapped component (whatever is between Suspend tag)
 */
 
 import React, { Fragment, useEffect, useState } from 'react';
+import PropTypes from 'prop-types';
 
 const Suspend = ({
   condition,
@@ -61,11 +62,30 @@ const Suspend = ({
 
   return (
     <>
-      {component.map((componentObj, ind) => (
-        <Fragment key={ind}>{componentObj}</Fragment>
-      ))}
+      {component.map((componentObj, ind) => {
+        const key = `Suspended${ind}`;
+        return <Fragment key={key}>{componentObj}</Fragment>;
+      })}
     </>
   );
 };
 
 export default Suspend;
+
+Suspend.defaultProps = {
+  multiplier: 1,
+  initialDelay: 0,
+  checkOnce: false,
+};
+
+Suspend.propTypes = {
+  condition: PropTypes.bool.isRequired,
+  placeholder: PropTypes.elementType.isRequired,
+  multiplier: PropTypes.number,
+  initialDelay: PropTypes.number,
+  checkOnce: PropTypes.bool,
+  children: PropTypes.oneOfType([
+    PropTypes.element,
+    PropTypes.arrayOf(PropTypes.element),
+  ]).isRequired,
+};
