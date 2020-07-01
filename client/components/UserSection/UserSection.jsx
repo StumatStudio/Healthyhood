@@ -4,11 +4,10 @@ import LongLatTest from '../experimental/LongLatTest';
 import NewerMapContainer from '../experimental/NewerMapContainer';
 import Suspend from '../common/Suspend';
 import MapPlaceholder from '../common/experimental/MapPlaceholder/MapPlaceholder';
-import WheelLoader from '../common/experimental/WheelLoader/WheelLoader';
 
 const UserSection = () => {
   const map = useSelector((state) => state.map);
-  const loading = !map.isLoading;
+  const loading = map.isLoading;
   console.log('loading', loading);
 
   return (
