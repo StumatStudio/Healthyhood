@@ -1,0 +1,114 @@
+/* .mapPlace__container {
+  width: 100%;
+  max-width: 1200px;
+  padding: 15px;
+  margin: auto;
+} */
+
+.mapPlace__mapContainer {
+  /* position: relative; */
+  width: 840px;
+  height: 540px;
+  margin: 3em auto;
+  /* padding: 15px; */
+  display: flex;
+  align-content: center;
+  justify-content: center;
+  flex-wrap: wrap;
+
+  border: 1px solid #fff;
+  background-color: #00000030;
+  border-radius: 10px;
+  box-shadow: 0 0 10px -3px rgba(165, 99, 99, 0.5);
+}
+
+.mapPlace__img-container {
+  position: relative;
+  width: 800px;
+  height: 500px;
+
+  min-width: 290px;
+  /* padding: 5px 15px; */
+  margin: 10px;
+  border: 0.3px solid #ccc;
+  box-shadow: none;
+}
+
+.mapPlace__mapSatBar {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  margin: 10px;
+  width: 169px;
+  height: 40px;
+  padding: 0px 17px;
+  border-radius: 2px;
+}
+
+.mapPlace__fullScreenBox {
+  position: absolute;
+  top: 0x;
+  right: 0px;
+  width: 40px;
+  height: 40px;
+  margin: 10px;
+  border-radius: 2px;
+}
+
+.mapPlace__streetViewBox {
+  position: absolute;
+  top: 320px;
+  right: 0px;
+  width: 40px;
+  height: 40px;
+  margin: 10px;
+  border-radius: 2px;
+}
+
+.mapPlace__zoomBar {
+  position: absolute;
+  width: 40px;
+  height: 80px;
+  bottom: 10px;
+  right: 0px;
+  margin: 10px;
+  border-radius: 2px;
+}
+
+/* Loader */
+.mapPlace--loading {
+  /* position: relative; */
+  background-color: #00000080;
+  overflow: hidden;
+}
+.mapPlace--loading::after {
+  display: block;
+  content: '';
+  /* position: absolute; */
+  width: 100%;
+  height: 100%;
+  -webkit-transform: translateX(-100%);
+  transform: translateX(-100%);
+  background: -webkit-gradient(
+    linear,
+    left top,
+    right top,
+    from(transparent),
+    color-stop(rgba(255, 255, 255, 0.2)),
+    to(transparent)
+  );
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.2),
+    transparent
+  );
+  -webkit-animation: mapPlace--loading 0.8s infinite;
+  animation: mapPlace--loading 0.8s infinite;
+}
+@keyframes mapPlace--loading {
+  100% {
+    -webkit-transform: translateX(100%);
+    transform: translateX(100%);
+  }
+}

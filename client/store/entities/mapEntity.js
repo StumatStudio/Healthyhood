@@ -17,9 +17,21 @@ const getInitialLocation = () => {
 };
 
 const initialState = {
-  yelpData: {},
-  walkData: {},
-  iqAirData: {},
+  yelp: {
+    data: {},
+    isLoading: false,
+  },
+
+  walk: {
+    data: {},
+    isLoading: false,
+  },
+
+  iqAir: {
+    data: {},
+    isLoading: false,
+  },
+
   healthComputed: false,
   healthScore: 0,
 
@@ -33,6 +45,11 @@ const initialState = {
   lastFetch: null,
   initialLoad: true,
 };
+
+// Used to differentiate data requests for loaders
+const yelpRequest = 'yelp';
+const walkRequest = 'walk';
+const iqAirRequest = 'iqAir';
 
 // Action Types
 const DATA_REQUEST = 'dataRequest';
@@ -68,10 +85,18 @@ const dataReducer = createReducer(initialState, {
 
 // Reducer Cases
 function dataRequestCase(state, action) {
+  const requestType = action.payload;
+  if (requestType === yelpRequest) state.yelp.isLoading = true;
+  if (requestType === walkRequest) state.walk.isLoading = true;
+  if (requestType === iqAirRequest) state.iqAir.isLoading = true;
   state.isLoading = true;
 }
 
 function dataRequestFailedCase(state, action) {
+  const requestType = action.payload.reducerPayload;
+  if (requestType === yelpRequest) state.yelp.isLoading = false;
+  if (requestType === walkRequest) state.walk.isLoading = false;
+  if (requestType === iqAirRequest) state.iqAir.isLoading = false;
   state.isLoading = false;
 }
 
@@ -92,25 +117,25 @@ function updateUserLocationCase(state, action) {
 function yelpDataReceivedCase(state, action) {
   const { data: yelpData } = action.payload;
   //console.log('yelpData', yelpData);
-  state.yelpData = yelpData;
-  state.yelpDataReturned = Date.now();
-  state.isLoading = false;
+  state.yelp.data = yelpData;
+  state.yelp.dataReturned = Date.now();
+  state.yelp.isLoading = false;
 }
 
 function walkDataReceivedCase(state, action) {
   const { data: walkData } = action.payload;
   console.log('walk Data', walkData);
-  state.walkData = walkData;
-  state.walkDataReturned = Date.now();
-  state.isLoading = false;
+  state.walk.data = walkData;
+  state.walk.dataReturned = Date.now();
+  state.walk.isLoading = false;
 }
 
 function iqAirDataReceivedCase(state, action) {
   const { data: iqAirData } = action.payload;
   console.log('Air Data', iqAirData);
-  state.iqAirData = iqAirData;
-  state.iqAirDataReturned = Date.now();
-  state.isLoading = false;
+  state.iqAir.data = iqAirData;
+  state.iqAir.dataReturned = Date.now();
+  state.iqAir.isLoading = false;
 }
 
 function healthScoreReceivedCase(state, action) {
@@ -139,7 +164,10 @@ export const getYelpData = latLongObj => {
     method: 'get',
     data: '',
     onStart: DATA_REQUEST,
+    startPayload: yelpRequest,
     onSuccess: YELP_DATA_RECEIVED,
+    onError: DATA_REQUEST_FAILED,
+    errorPayload: yelpRequest,
   });
 };
 
@@ -151,8 +179,10 @@ export const getWalkData = latLonObj => {
     method: 'get',
     data: '',
     onStart: DATA_REQUEST,
+    startPayload: walkRequest,
     onSuccess: WALK_DATA_RECEIVED,
     onError: DATA_REQUEST_FAILED,
+    errorPayload: walkRequest,
   });
 };
 
@@ -164,8 +194,10 @@ export const getIqAirData = latLonObj => {
     method: 'get',
     data: '',
     onStart: DATA_REQUEST,
+    startPayload: iqAirRequest,
     onSuccess: IQAIR_DATA_RECEIVED,
     onError: DATA_REQUEST_FAILED,
+    errorPayload: iqAirRequest,
   });
 };
 

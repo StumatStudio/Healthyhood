@@ -12,7 +12,6 @@ const App = () => (
       <ComponentsRouting />
     </LoadScript>
     <Footer />
-    {/*******************/}
     <BackgroundAnimation />
   </>
 );

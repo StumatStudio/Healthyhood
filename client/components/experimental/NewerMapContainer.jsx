@@ -17,9 +17,9 @@ function MyComponent() {
   // console.log('state', React.useState());
   const [map, setMap] = React.useState(null);
   const {
-    yelpData,
-    walkData,
-    iqAirData,
+    yelp: { data: yelpData, isLoading: yelpLoading },
+    walk: { data: walkData, isLoading: walkLoading },
+    iqAir: { data: iqAirData, isLoading: iqAirLoading },
     autoLocation,
     userEnteredLocation,
     initialLoad,
@@ -36,24 +36,22 @@ function MyComponent() {
     ? userEnteredLocation
     : autoLocation;
 
-  const onLoad = React.useCallback(function callback(map) {
+  const onLoad = React.useCallback(map => {
     // console.log('map', map);
     const bounds = new window.google.maps.LatLngBounds();
     // map.fitBounds(bounds);
     setMap(map);
   }, []);
 
-  const onUnmount = React.useCallback(function callback(map) {
+  const onUnmount = React.useCallback(map => {
     setMap(null);
   }, []);
 
-  const getNewState = () => {
-    return {
-      yelpData,
-      walkData,
-      iqAirData,
-    };
-  };
+  const getNewState = () => ({
+    yelpData,
+    walkData,
+    iqAirData,
+  });
 
   // const callApis = async () => {
   //   if (initialLoad) return;
@@ -89,9 +87,6 @@ function MyComponent() {
   //   dispatch(getHealthScore(secretSauceObj));
   // };
 
-
-
-
   // Choose marker icons via this object
   const markerTypes = {
     blue: 'http://maps.google.com/mapfiles/ms/icons/blue-dot.png',
@@ -100,7 +95,6 @@ function MyComponent() {
     yellow: 'http://maps.google.com/mapfiles/ms/icons/yellow-dot.png',
     purple: 'http://maps.google.com/mapfiles/ms/icons/purple-dot.png',
   };
-
 
   const createMarker = (busnObj, idx, type) => {
     const { coordinates, name } = busnObj;
@@ -147,7 +141,7 @@ function MyComponent() {
       }}
     >
       {/* Child components, such as markers, info windows, etc. */}
-      <Marker position={mapCenter} title={'Your Location'} />
+      <Marker position={mapCenter} title="Your Location" />
       {restaurants &&
         restaurants.businesses.map((busnObj, idx) =>
           createMarker(busnObj, idx, 'rest')
