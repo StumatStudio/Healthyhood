@@ -97,10 +97,41 @@ const register = async (req, res) => {
   }
 };
 
+const login = async (req, res) => {
+  try {
+    const { email, password } = req.body;
+
+    // check if user exists
+    const findUser = await findUserByEmail(email);
+
+    if (!findUser) {
+      return res.json({ error: 'User Not Found' });
+    }
+    // Load hash, compare password
+    const hash = await findUser.password;
+    const pwMatch = await bcrypt.compare(password, hash);
+
+    if (!pwMatch) {
+      return res.json({ error: 'Incorrect Password' });
+    }
+
+    // generate JWT
+    const payload = { email };
+    const token = jwt.sign(payload, process.env.JWTSECRET, {
+      expiresIn: '1h',
+    });
+
+    return res.cookie('token', token, { httpOnly: true }).send({ email });
+  } catch (err) {
+    return res.json({ err });
+  }
+};
+
 // ------
 // Export
 // ------
 
 module.exports = {
   register,
+  login,
 };
