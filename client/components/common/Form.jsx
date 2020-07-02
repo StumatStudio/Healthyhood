@@ -1,65 +1,140 @@
-import React, { Component } from 'react';
-import Input from './Input';
+import React, { useState, Children, cloneElement } from 'react';
+import PropTypes from 'prop-types';
+import Joi from '@hapi/joi';
 
 /*
-This component doesn't directly render anything. It's a wrapper component
-for any other component that you want to use a form. Any of the form elements
-you choose to render via the functions included will be sharing the same
-component state via inheritance.
-ie: component Banana extends Form.
-In Banana you render two inputs and a select. 
-The state referred to in Form is inherited from Banana and therefore
-your two inputs and select are all using Banana's state to track their values.
+Default validation functions wil be used when custom
+functions are not defined on props. Default settings
+require Joi.
 */
 
-class Form extends Component {
-  // Any child of this class (ie: Banana) must have data in its state.
-  state = {
-    data: {},
-  }
+const defaultFunctions = {
+  /*
+  Relies on schema from child class compared against value from
+  input field. Input field name will match property from state data.
+  Validates single propery for handleChange.
+  */
+  validateProperty: (input, joiSchema) => {
+    const { name, value } = input;
+    const fieldObj = { [name]: value };
+    const fieldSchema = Joi.object({ [name]: joiSchema[name] });
+    const { error } = fieldSchema.validate(fieldObj);
+
+    // Will be set to state in handleChange
+    return error ? error.message : null;
+  },
 
   /*
-   Will update local state with user input for the field passed on the 
-   event object to this function. The value for the field will be given
-   a property on state.data that is associated with the name attribute given 
-   to the field via props when the field is created.
-   ie: <input name='bananaSplit' /> value will be at state.data.bananaSplit
-   */
-  handleChange = ({ currentTarget: input }) => {
-    const data = { ...this.state.data };
-    data[input.name] = input.value;
-    this.setState({ data });
-  };
+  Validates entire input for handleSubmit verifying that the data is fit
+  for fetch
+  */
+  validateInput: (data, joiSchema) => {
+    const joiOptions = { abortEarly: false }; // Don't quit on first error
+    const { error } = joiSchema.validate(data, joiOptions); // must match childClass schema name
+    if (!error) return null;
 
-  // Any child of this component (ie: Banana) must have a doSubmit method
-  handleSubmit = eventObj => {
-    eventObj.preventDefault();
-    this.doSubmit();
-  };
-
-  // Optional fields for form. Call these functions in your child component
-  renderInput(name, label, type = 'text', placeholder, instructions) {
-    const { data } = this.state;
-    return (<Input
-      name={name}
-      label={label}
-      onChange={this.handleChange}
-      type={type}
-      instructions={instructions}
-      value={data[name]}
-      placeholder={placeholder}
-    />)
-  };
-
-  renderButton(label, classString) {
-    return (
-      <button
-        className={classString}>
-        {label}
-      </button>
-    )
-  }
+    /*
+    If we're here, we won't be sending a fetch request we'll be setting up notifications
+    For client. This is all contingent on Joi returns (details array of error Objs)
+    */
+    const newStateErrorObj = error.details.reduce((stateErr, errObj) => {
+      const { path: fieldName, message } = errObj; // Joi path is array
+      stateErr[fieldName[0]] = message;
+      return stateErr;
+    }, {});
+    return newStateErrorObj;
+  },
 };
 
+/*
+If using customized validateInput and validateProperty
+they must return an error object if errors and null if not
+
+validateProperty will need to take an eventObj parameter from the
+built in handleChange function.
+
+validateInput will need to take a data property that will be filled
+with the form's state by the built in handleSubmit function
+*/
+
+const Form = ({
+  doSubmit,
+  initialState,
+  classNameString,
+  errorClassNameString,
+  propertySchemaObj,
+  formSchema,
+  validateProperty,
+  validateInput,
+  children,
+}) => {
+  // Passing an initial state of empty strings prevents changing children
+  // from uncontrolled components to controlled components
+  const [data, setData] = useState(initialState);
+  const [errors, setErrors] = useState({});
+
+  const handleChange = ({ currentTarget: input }) => {
+    const newErrors = { ...errors };
+    const errorMessage = validateProperty(input, propertySchemaObj); // returns null if no errors
+    if (errorMessage) newErrors[input.name] = errorMessage;
+    else delete newErrors[input.name];
+
+    // Update State with new values
+    const newData = { ...data };
+    newData[input.name] = input.value;
+
+    setData(newData);
+    setErrors(newErrors);
+  };
+
+  const handleSubmit = (eventObj) => {
+    // prevent auto render of page
+    eventObj.preventDefault();
+
+    // Check for errors in entire form. If so prevent submit
+    const formErrors = validateInput(data, formSchema); // returns null if no errors
+    const stateErrors = formErrors || {};
+    setErrors(stateErrors);
+    if (formErrors) {
+      console.log('formErrors', formErrors);
+      return;
+    }
+
+    // No errors clear to submit via function defined on props
+    doSubmit(data);
+    setData(initialState);
+    setErrors({});
+  };
+
+  const addPropsToChildren = (child) => {
+    const elementType = child.type.name;
+    if (elementType === 'Input') {
+      return cloneElement(child, {
+        onChange: handleChange,
+        value: data[child.props.name],
+        errorClassNameString,
+        error: errors[child.props.name],
+      });
+    }
+
+    if (elementType === 'FormButton') {
+      return cloneElement(child, {
+        isDisabled: validateInput(data, formSchema),
+      });
+    }
+    return child;
+  };
+
+  return (
+    <form className={classNameString} onSubmit={handleSubmit}>
+      {Children.map(children, (child) => addPropsToChildren(child))}
+    </form>
+  );
+};
 
 export default Form;
+
+Form.defaultProps = {
+  validateProperty: defaultFunctions.validateProperty,
+  validateInput: defaultFunctions.validateInput,
+};

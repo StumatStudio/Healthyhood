@@ -4,9 +4,10 @@ import NavBar from './components/NavBar/NavBar';
 import ComponentsRouting from './components/ComponentsRouting/ComponentsRouting';
 import Footer from './components/Footer/Footer';
 import BackgroundAnimation from './components/BackgroundAnimation/BackgroundAnimation';
-
+import TestLogin from './components/TestLogin';
 const App = () => (
   <>
+    <TestLogin />
     <LoadScript googleMapsApiKey={process.env.GMAPS_KEY} libraries={['places']}>
       <NavBar />
       <ComponentsRouting />

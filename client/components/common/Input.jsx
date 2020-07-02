@@ -5,6 +5,7 @@ const Input = ({
   name,
   label,
   onChange,
+  error,
   instructions,
   type,
   value,
@@ -22,6 +23,7 @@ const Input = ({
         placeholder={placeholder}
         className="inputField"
       />
+      {error && <div className="alert alert-danger">{error}</div>}
       {instructions && <div>{instructions}</div>}
     </div>
   );
@@ -30,7 +32,7 @@ const Input = ({
 Input.propTypes = {
   name: PropTypes.string.isRequired,
   label: PropTypes.string.isRequired,
-  onChange: PropTypes.func.isRequired,
+  onChange: PropTypes.func,
   instructions: PropTypes.string,
   type: PropTypes.string,
   value: PropTypes.any,
