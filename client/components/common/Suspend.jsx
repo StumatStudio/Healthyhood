@@ -12,17 +12,27 @@ children: Wrapped component (whatever is between Suspend tag)
 */
 
 import React, { Fragment, useEffect, useState } from 'react';
+import PropTypes from 'prop-types';
 
 const Suspend = ({
   condition,
   placeholder: Placeholder,
-  multiplier,
+  placeholdersToRender,
   initialDelay,
   checkOnce,
   children,
 }) => {
-  const [component, setComponent] = useState([<Placeholder />]);
+  const [component, setComponent] = useState([]);
   const [isChecked, setIsChecked] = useState(false);
+
+  // Computes Placeholder Array to render
+  const createArayOfPlaceholderElements = () => {
+    const placeholderArray = [];
+    for (let i = 0; i < placeholdersToRender; i += 1) {
+      placeholderArray.push(<Placeholder key={i} />);
+    }
+    return placeholderArray;
+  };
 
   useEffect(() => {
     // skips the rest if this component wraps data that needs only load once
@@ -31,27 +41,24 @@ const Suspend = ({
       return;
     }
 
-    // Stabalize initial render of placeholder...so it's not instant and jerky on render
-    // change btwn placeholder and component
-    const delay = initialDelay || 0;
     let delayedTimeout = null;
     if (condition) {
+      const tempComponent = createArayOfPlaceholderElements();
+      setComponent(tempComponent);
+    } else {
+      // Stabalize initial render of placeholder...so it's not instant and jerky on render
+      // change btwn placeholder and component
       if (initialDelay) {
+        setComponent(createArayOfPlaceholderElements());
         delayedTimeout = setTimeout(() => {
           setComponent([children]);
-        }, delay);
+        }, initialDelay);
       } else {
         setComponent([children]);
       }
       setIsChecked(true); // half of the magic for data that needs only render once
-    } else {
-      const tempComponent = [];
-      const placeholdersToRender = multiplier || 1;
-      for (let i = 0; i < placeholdersToRender; i += 1) {
-        tempComponent.push(<Placeholder key={i} />);
-      }
-      setComponent(tempComponent);
     }
+
     return () => {
       if (delayedTimeout) {
         clearTimeout(delayedTimeout);
@@ -61,11 +68,30 @@ const Suspend = ({
 
   return (
     <>
-      {component.map((componentObj, ind) => (
-        <Fragment key={ind}>{componentObj}</Fragment>
-      ))}
+      {component.map((componentObj, ind) => {
+        const key = `Suspended${ind}`;
+        return <Fragment key={key}>{componentObj}</Fragment>;
+      })}
     </>
   );
 };
 
 export default Suspend;
+
+Suspend.defaultProps = {
+  placeholdersToRender: 1,
+  initialDelay: 0,
+  checkOnce: false,
+};
+
+Suspend.propTypes = {
+  condition: PropTypes.bool.isRequired,
+  placeholder: PropTypes.elementType.isRequired,
+  placeholdersToRender: PropTypes.number,
+  initialDelay: PropTypes.number,
+  checkOnce: PropTypes.bool,
+  children: PropTypes.oneOfType([
+    PropTypes.element,
+    PropTypes.arrayOf(PropTypes.element),
+  ]).isRequired,
+};
