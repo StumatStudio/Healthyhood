@@ -15,7 +15,7 @@ app.use(express.urlencoded({ extended: true }));
 //     }
 //   });
 // });
-
+console.log('g-MapsKey', process.env.GMAPSKEY);
 // Startup files
 require('./startup/logging')();
 require('./startup/cors')(app);
