@@ -1,7 +1,7 @@
 const express = require('express');
 const path = require('path');
 
-const users = require('../routes/users');
+const userRoutes = require('../routes/userRoutes');
 const walkScore = require('../routes/walkScore');
 const yelp = require('../routes/yelp');
 const iqAir = require('../routes/iqAir');
@@ -16,7 +16,7 @@ all of the routes within to the app object passed in
 
 module.exports = (app) => {
   // Traditional Routes
-  app.use(`${baseUrl}/users`, users);
+  app.use(`${baseUrl}/user`, userRoutes);
   app.use(`${baseUrl}/walkscore`, walkScore);
   app.use(`${baseUrl}/yelp`, yelp);
   app.use(`${baseUrl}/iqair`, iqAir);
@@ -28,10 +28,15 @@ module.exports = (app) => {
 
   // Static files
   if (process.env.NODE_ENV !== 'development') {
-    app.use('/dist', express.static(path.join(__dirname, '..', '..', 'client', 'dist')));
+    app.use(
+      '/dist',
+      express.static(path.join(__dirname, '..', '..', 'client', 'dist'))
+    );
 
     app.get('/', (req, res) => {
-      res.sendFile(path.join(__dirname, '..', '..', 'client', 'dist', 'index.html'));
+      res.sendFile(
+        path.join(__dirname, '..', '..', 'client', 'dist', 'index.html')
+      );
     });
   }
 

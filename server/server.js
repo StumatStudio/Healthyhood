@@ -1,5 +1,4 @@
 const express = require('express');
-const mongoose = require('mongoose');
 require('dotenv').config();
 
 const errorMiddle = require('./middleware/errorHandling');
@@ -19,7 +18,6 @@ app.use(express.urlencoded({ extended: true }));
 console.log('g-MapsKey', process.env.GMAPSKEY);
 // Startup files
 require('./startup/logging')();
-require('./startup/database')();
 require('./startup/cors')(app);
 require('./startup/routes')(app);
 
