@@ -1,114 +1,106 @@
-const bcrypt = require('bcryptjs');
-const models = require('../models/userModel');
+const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
 
-const userController = {};
+const pool = require('../database');
 
-/**
- * getAllUsers - retrieve all users from the database and stores it into
- * res.locals.users before moving on to next middleware.
- */
-userController.getAllUsers = (req, res, next) => {
-  console.log('Invoked userController.getAllUsers');
-  models.Users.find({})
-    .exec()
-    .then(data => {
-      res.locals.users = data;
-      return next();
-    })
-    .catch(error =>
-      next({
-        message: 'Error in userController.getAllUsers middleware',
-        serverMessage: {
-          err: error,
-        },
-      })
-    );
+const bcryptSaltRounds = 10;
+
+// ----------------
+// Helper functions
+// ----------------
+
+const findUserByEmail = async (email) => {
+  const user = await pool.query('SELECT * FROM users WHERE email = $1', [
+    email,
+  ]);
+
+  return user.rows[0];
 };
 
-/**
- * createUser - create and save a new User into the database.
- */
-userController.createUser = (req, res, next) => {
-  console.log('Invoked userController.createUser');
-  const { password, username, email } = req.body;
-
-  if (
-    typeof req.body.username !== 'string' ||
-    typeof req.body.email !== 'string' ||
-    typeof req.body.password !== 'string' ||
-    username === undefined ||
-    email === undefined ||
-    password === undefined
-  )
-    return next({
-      message: 'Error in userController.createUser middleware',
-      status: 400,
-      serverMessage: {
-        err: 'Bad Request',
-      },
-    });
-
-  models.Users.create(req.body)
-    .then(data => {
-      res.locals.user = data;
-      return next();
-    })
-    .catch(error =>
-      next({
-        message: 'Error in userController.createUser middleware',
-        serverMessage: {
-          err: error,
-        },
-      })
-    );
+const hashPassword = async (password) => {
+  const encryptedPassword = await bcrypt.hash(password, bcryptSaltRounds);
+  return encryptedPassword;
 };
 
-/**
- * verifyUser - Obtain username and password from the request body, locate
- * the appropriate user in the database, and then authenticate the submitted
- * password against the password stored in the database.
- */
-userController.verifyUser = async (req, res, next) => {
-  console.log('Invoked userController.verifyUser');
-  const { password, username } = req.body;
+const validateEmail = (email) => {
+  // Regex for email validation from: https://stackoverflow.com/a/46181/2040509
+  // If you want to modify this regex, make sure the front end matches
+  const regex = /^(([^<>()[\].,;:\s@"]+(\.[^<>()[\].,;:\s@"]+)*)|(".+"))@(([^<>()[\].,;:\s@"]+\.)+[^<>()[\].,;:\s@"]{2,})$/i;
+  if (email.match(regex)) return true;
+  return false;
+};
 
-  if (
-    typeof req.body.username !== 'string' ||
-    typeof req.body.password !== 'string' ||
-    username === undefined ||
-    password === undefined
-  )
-    return next({
-      message: 'Error in userController.verifyUser middleware',
-      status: 400,
-      serverMessage: {
-        err: 'Bad Request',
-      },
-    });
+const validatePassword = (password) => {
+  // Password must be between 4 and 8 digits long and include at least one numeric digit
+  // Regex from: http://regexlib.com/REDetails.aspx?regexp_id=30
+  // If you want to modify this regex, make sure the front end matches
+  const regex = /^(?=.*\d).{4,8}$/;
+  if (password.match(regex)) return true;
+  return false;
+};
 
-  const users = await models.Users.find({ username });
-  if (users.length === 0)
-    return next({
-      message: 'Error in userController.verifyUser middleware',
-      status: 401,
-      serverMessage: {
-        err: 'Invalid username',
-      },
-    });
+// ---------------
+// POST - Register
+// ---------------
 
-  const isMatch = await bcrypt.compare(password, users[0].password);
-  if (isMatch) {
-    res.locals.user = users[0];
-    return next();
-  } else {
-    return next({
-      message: 'Error in userController.verifyUser middleware',
-      status: 401,
-      serverMessage: {
-        err: 'Invalid password',
-      },
-    });
+// Route: /api/user/register
+// -- Expects a email and password key to be present in the body of the request
+// -- That email and password should already be validated on the front end...
+// ...but will be validated again on the backend
+//
+// Response will return a object and a JWT in a cookie:
+// -- If the objects error key is not empty, you know there's an error and can read the message
+// -- Otherwise the data key will contain the user info that was added to the db
+// -- JWT will contain the user email in the payload
+
+const register = async (req, res) => {
+  try {
+    const { email, password } = req.body;
+    const findUser = await findUserByEmail(email);
+
+    // Check if user already exists
+    if (findUser) {
+      return res.json({ error: 'User already exists' });
+    }
+
+    // Validate password
+    if (!validatePassword(password)) {
+      return res.json({ error: 'Invalid password format' });
+    }
+
+    // Validate username
+    if (!validateEmail(email)) {
+      return res.json({ error: 'Invalid email format' });
+    }
+
+    // Encrypt password
+    const encryptedPassword = await hashPassword(password);
+
+    // Register new user
+    const newUser = await pool.query(
+      'INSERT INTO users (email, password) VALUES($1, $2) RETURNING *',
+      [email, encryptedPassword]
+    );
+
+    // Create a JWT
+    const payload = { email };
+    const token = jwt.sign(payload, process.env.JWTSECRET, { expiresIn: '1h' });
+
+    return res
+      .cookie('token', token, { httpOnly: true })
+      .send({ data: newUser.rows[0] });
+  } catch (error) {
+    // DB returned a error
+    // We might not want to pass the error directly to the front end...
+    // ...anybody have any other ideas how to handle this?
+    return res.json({ error });
   }
 };
 
-module.exports = userController;
+// ------
+// Export
+// ------
+
+module.exports = {
+  register,
+};
