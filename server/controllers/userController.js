@@ -121,7 +121,7 @@ const login = async (req, res) => {
       expiresIn: '1h',
     });
 
-    return res.cookie('token', token, { httpOnly: true }).send({ email });
+    return res.cookie('token', token, { httpOnly: true }).send({ email }); // maybe favorites
   } catch (err) {
     return res.json({ err });
   }
