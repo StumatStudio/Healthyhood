@@ -105,14 +105,14 @@ const login = async (req, res) => {
     const findUser = await findUserByEmail(email);
 
     if (!findUser) {
-      return res.json({ error: 'User Not Found' });
+      return res.json({ error: 'Incorrect Email or Password' });
     }
     // Load hash, compare password
     const hash = await findUser.password;
     const pwMatch = await bcrypt.compare(password, hash);
 
     if (!pwMatch) {
-      return res.json({ error: 'Incorrect Password' });
+      return res.json({ error: 'Incorrect Email or Password' });
     }
 
     // generate JWT
