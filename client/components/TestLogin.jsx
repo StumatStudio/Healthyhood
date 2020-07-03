@@ -1,7 +1,7 @@
 import React from 'react';
 import Joi from '@hapi/joi';
 import Form from './common/Form';
-import Input from './common/Input';
+import FormInput from './common/FormInput';
 import FormButton from './common/FormButton';
 
 const TestLogin = () => {
@@ -31,11 +31,11 @@ const TestLogin = () => {
       initialState={initialState}
       doSubmit={doSubmit}
     >
-      <Input name={'Test1'} label={'Test1'}>
+      <FormInput name={'Test1'} label={'Test1'}>
         Test this NOw
-      </Input>
-      <Input name={'Test2'} label={'Test2'} />
-      <Input name={'Test3'} label={'Test3'} />
+      </FormInput>
+      <FormInput name={'Test2'} label={'Test2'} />
+      <FormInput name={'Test3'} label={'Test3'} />
       <FormButton label="Submit" />
     </Form>
   );

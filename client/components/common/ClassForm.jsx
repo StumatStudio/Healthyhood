@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import Input from './Input';
+import Input from './FormInput';
 
 /*
 This component doesn't directly render anything. It's a wrapper component
@@ -16,7 +16,7 @@ class Form extends Component {
   // Any child of this class (ie: Banana) must have data in its state.
   state = {
     data: {},
-  }
+  };
 
   /*
    Will update local state with user input for the field passed on the 
@@ -32,7 +32,7 @@ class Form extends Component {
   };
 
   // Any child of this component (ie: Banana) must have a doSubmit method
-  handleSubmit = eventObj => {
+  handleSubmit = (eventObj) => {
     eventObj.preventDefault();
     this.doSubmit();
   };
@@ -40,26 +40,22 @@ class Form extends Component {
   // Optional fields for form. Call these functions in your child component
   renderInput(name, label, type = 'text', placeholder, instructions) {
     const { data } = this.state;
-    return (<Input
-      name={name}
-      label={label}
-      onChange={this.handleChange}
-      type={type}
-      instructions={instructions}
-      value={data[name]}
-      placeholder={placeholder}
-    />)
-  };
+    return (
+      <Input
+        name={name}
+        label={label}
+        onChange={this.handleChange}
+        type={type}
+        instructions={instructions}
+        value={data[name]}
+        placeholder={placeholder}
+      />
+    );
+  }
 
   renderButton(label, classString) {
-    return (
-      <button
-        className={classString}>
-        {label}
-      </button>
-    )
+    return <button className={classString}>{label}</button>;
   }
-};
-
+}
 
 export default Form;

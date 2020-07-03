@@ -60,8 +60,8 @@ with the form's state by the built in handleSubmit function
 const Form = ({
   doSubmit,
   initialState,
-  classNameString,
-  errorClassNameString,
+  classString,
+  errorClassString,
   propertySchemaObj,
   formSchema,
   validateProperty,
@@ -100,7 +100,7 @@ const Form = ({
       return;
     }
 
-    // No errors clear to submit via function defined on props
+    // No errors clear to submit via function defined on props and reset form
     doSubmit(data);
     setData(initialState);
     setErrors({});
@@ -108,11 +108,12 @@ const Form = ({
 
   const addPropsToChildren = (child) => {
     const elementType = child.type.name;
-    if (elementType === 'Input') {
+
+    if (elementType === 'FormInput') {
       return cloneElement(child, {
         onChange: handleChange,
         value: data[child.props.name],
-        errorClassNameString,
+        errorClassString,
         error: errors[child.props.name],
       });
     }
@@ -126,7 +127,7 @@ const Form = ({
   };
 
   return (
-    <form className={classNameString} onSubmit={handleSubmit}>
+    <form className={classString} onSubmit={handleSubmit}>
       {Children.map(children, (child) => addPropsToChildren(child))}
     </form>
   );
@@ -137,4 +138,26 @@ export default Form;
 Form.defaultProps = {
   validateProperty: defaultFunctions.validateProperty,
   validateInput: defaultFunctions.validateInput,
+  classString: '',
+  errorClassString: '',
+  propertySchemaObj: {},
+  formSchema: {},
+};
+
+Form.propTypes = {
+  doSubmit: PropTypes.func.isRequired,
+  initialState: PropTypes.object.isRequired,
+  classString: PropTypes.string,
+  errorClassString: PropTypes.string,
+  propertySchemaObj: PropTypes.object,
+  formSchema: PropTypes.object,
+  validateProperty: PropTypes.func,
+  validateInput: PropTypes.func,
+  children: PropTypes.oneOfType([
+    PropTypes.element,
+    PropTypes.elementType,
+    PropTypes.arrayOf(
+      PropTypes.oneOfType([PropTypes.element, PropTypes.elementType])
+    ),
+  ]).isRequired,
 };
