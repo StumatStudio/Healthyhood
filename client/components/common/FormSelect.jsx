@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-const Select = ({
+const FormSelect = ({
   name,
   label,
   options,
@@ -9,12 +9,15 @@ const Select = ({
   error,
   instruction,
   value,
+  errorClassString,
+  containerClassString,
+  fieldClassString,
 }) => {
   const createOptions = (optionObj) => {
-    const { _id, name } = optionObj;
+    const { _id, name: optionName } = optionObj;
     return (
       <option key={_id} value={_id}>
-        {name}
+        {optionName}
       </option>
     );
   };
@@ -23,35 +26,52 @@ const Select = ({
   const newOptions = [{ _id: 'null', name: '' }, ...options];
 
   return (
-    <div className="form-group">
+    <div className={containerClassString}>
       <label htmlFor={name}>{label}</label>
       <select
         name={name}
         id={name}
         onChange={onChange}
-        className="form-control"
+        className={fieldClassString}
+        value={value}
       >
         {newOptions.map((optionObj) => createOptions(optionObj))}
       </select>
 
-      {/*Conditionally Render Error messages under field*/}
-      {error && <div className="alert alert-danger">{error}</div>}
+      {/* Conditionally Render Error messages under field */}
+      {error && <div className={errorClassString}>{error}</div>}
       {!error && instruction && <div>{instruction}</div>}
     </div>
   );
 };
 
-Select.propTypes = {
-  name: PropTypes.string.isRequired,
-  label: PropTypes.string.isRequired,
-  onChange: PropTypes.func.isRequired,
-  // options: PropTypes.arrayOf(
-  //   PropTypes.shape(
-  //     {
-  //       _id: PropTypes.string,
-  //       name: PropTypes.string
-  //     })),
-  instruction: PropTypes.string,
+export default FormSelect;
+
+FormSelect.defaultProps = {
+  error: null,
+  instruction: '',
+  value: '',
+  errorClassString: '',
+  containerClassString: '',
+  fieldClassString: '',
+  onChange: (event) =>
+    console.log('onChange unhandled for Select Tag:', event.currentTarget.name),
 };
 
-export default Select;
+FormSelect.propTypes = {
+  name: PropTypes.string.isRequired,
+  label: PropTypes.string.isRequired,
+  onChange: PropTypes.func,
+  options: PropTypes.arrayOf(
+    PropTypes.shape({
+      _id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+      name: PropTypes.string,
+    })
+  ).isRequired,
+  error: PropTypes.any,
+  instruction: PropTypes.string,
+  value: PropTypes.string,
+  errorClassString: PropTypes.string,
+  containerClassString: PropTypes.string,
+  fieldClassString: PropTypes.string,
+};

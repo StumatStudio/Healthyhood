@@ -67,24 +67,29 @@ const Form = ({
   validateProperty,
   validateInput,
   children,
+  checkErrorsOnSubmitOnly,
 }) => {
   // Passing an initial state of empty strings prevents changing children
-  // from uncontrolled components to controlled components
+  // from uncontrolled components to controlled components. Each input will have
+  // a name. That name will become a property in the state object and should be
+  // matched in the initial state "schema"
   const [data, setData] = useState(initialState);
   const [errors, setErrors] = useState({});
 
   const handleChange = ({ currentTarget: input }) => {
-    const newErrors = { ...errors };
-    const errorMessage = validateProperty(input, propertySchemaObj); // returns null if no errors
-    if (errorMessage) newErrors[input.name] = errorMessage;
-    else delete newErrors[input.name];
+    if (!checkErrorsOnSubmitOnly) {
+      const newErrors = { ...errors };
+      const errorMessage = validateProperty(input, propertySchemaObj); // returns null if no errors
+      if (errorMessage) newErrors[input.name] = errorMessage;
+      else delete newErrors[input.name];
+      setErrors(newErrors);
+    }
 
     // Update State with new values
     const newData = { ...data };
     newData[input.name] = input.value;
 
     setData(newData);
-    setErrors(newErrors);
   };
 
   const handleSubmit = (eventObj) => {
@@ -101,11 +106,15 @@ const Form = ({
     }
 
     // No errors clear to submit via function defined on props and reset form
+    // Runs doSubmit passed in via props. doSubmit should be defined in the
+    // component that renders the form and contain your submittal logic
     doSubmit(data);
     setData(initialState);
     setErrors({});
   };
 
+  // Passes data managed by form as a whole to indiviual input elements as needed
+  // to ensure form works as a unit.
   const addPropsToChildren = (child) => {
     const elementType = child.type.name;
 
@@ -118,10 +127,21 @@ const Form = ({
       });
     }
 
-    if (elementType === 'FormButton') {
+    if (elementType === 'FormSelect') {
       return cloneElement(child, {
-        isDisabled: validateInput(data, formSchema),
+        onChange: handleChange,
+        value: data[child.props.name],
+        errorClassString,
+        error: errors[child.props.name],
       });
+    }
+
+    if (elementType === 'FormButton') {
+      if (!checkErrorsOnSubmitOnly) {
+        return cloneElement(child, {
+          isDisabled: validateInput(data, formSchema),
+        });
+      }
     }
     return child;
   };
@@ -142,6 +162,7 @@ Form.defaultProps = {
   errorClassString: '',
   propertySchemaObj: {},
   formSchema: {},
+  checkErrorsOnSubmitOnly: true,
 };
 
 Form.propTypes = {
@@ -160,4 +181,5 @@ Form.propTypes = {
       PropTypes.oneOfType([PropTypes.element, PropTypes.elementType])
     ),
   ]).isRequired,
+  checkErrorsOnSubmitOnly: PropTypes.bool,
 };

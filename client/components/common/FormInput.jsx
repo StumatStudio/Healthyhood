@@ -13,39 +13,41 @@ const FormInput = ({
   type,
   value,
   placeholder,
-}) => {
-  return (
-    <div className={containerClassString}>
-      <label htmlFor={name}>{label}</label>
-      <input
-        name={name}
-        id={name}
-        onChange={onChange}
-        type={type}
-        value={value}
-        placeholder={placeholder}
-        className={fieldClassString}
-      />
-      {error && <div className={errorClassString}>{error}</div>}
-      {instructions && <div>{instructions}</div>}
-    </div>
-  );
-};
+}) => (
+  <div className={containerClassString}>
+    <label htmlFor={name}>{label}</label>
+    <input
+      name={name}
+      id={name}
+      onChange={onChange}
+      type={type}
+      value={value}
+      placeholder={placeholder}
+      className={fieldClassString}
+    />
+    {error && <div className={errorClassString}>{error}</div>}
+    {instructions && <div>{instructions}</div>}
+  </div>
+);
 
 FormInput.defaultProps = {
   instructions: '',
   value: '',
   placeholder: '',
   type: 'text',
+  error: null,
   errorClassString: '',
   containerClassString: '',
   fieldClassString: '',
+  onChange: (event) => {
+    console.log(`Unhandled change in Input ${event.currentTarget.name}`);
+  },
 };
 
 FormInput.propTypes = {
   name: PropTypes.string.isRequired,
   label: PropTypes.string.isRequired,
-  onChange: PropTypes.func.isRequired,
+  onChange: PropTypes.func,
   instructions: PropTypes.string,
   type: PropTypes.oneOf([
     'button',
