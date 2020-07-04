@@ -87,7 +87,11 @@ const Form = ({
 
     // Update State with new values
     const newData = { ...data };
-    newData[input.name] = input.value;
+    if (input.type === 'checkbox') {
+      newData[input.name] = input.checked;
+    } else {
+      newData[input.name] = input.value;
+    }
 
     setData(newData);
   };

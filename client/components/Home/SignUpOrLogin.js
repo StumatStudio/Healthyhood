@@ -2,6 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import SignUp from '../SignUp/SignUp';
 import Login from '../Login/Login';
+import Login2 from '../Login/Login2';
 
 /**
  * On the home screen/webpage, when the user is not logged in, <Home />
@@ -12,7 +13,7 @@ import Login from '../Login/Login';
  */
 
 const SignUpOrLogin = ({ defaultToSignUp }) => (
-  <>{defaultToSignUp ? <SignUp /> : <Login />}</>
+  <>{false ? <Login /> : <Login2 />}</>
 );
 
 const mapStateToProps = ({ users: { defaultToSignUp } }) => ({
