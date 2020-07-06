@@ -1,6 +1,6 @@
 import React from 'react';
-import { useSelector, useDispatch } from 'react-redux';
 import CardsContainer from './CardsContainer';
+import './Favorites.css';
 
 const Favorites = () => (
   <div className="favorites__mainContainer">

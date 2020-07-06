@@ -25,6 +25,7 @@ const initialState = {
   favoriteSearches: {
     1: {
       _id: 1,
+      title: 'San Fran',
       healthScore: 99,
       yelpResult: { restaurants: 106, gyms: 113 },
       walkScore: 91,
@@ -32,6 +33,7 @@ const initialState = {
     },
     2: {
       _id: 2,
+      title: 'Detroit',
       healthScore: -10,
       yelpResult: { restaurants: 415000, gyms: 1 },
       walkScore: 2,
@@ -39,6 +41,7 @@ const initialState = {
     },
     3: {
       _id: 3,
+      title: 'Everywhere else',
       healthScore: 75,
       yelpResult: { restaurants: 487, gyms: 200 },
       walkScore: 75,

@@ -2,7 +2,8 @@ import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import SearchCard from './SearchCard';
 import Suspend from '../common/Suspend';
-import MapPlaceholder from '../common/experimental/MapPlaceholder/MapPlaceholder';
+import './Favorites.css';
+import SearchCardPlaceholder from '../common/experimental/SearchCardPlaceholder/SearchCardPlaceholder';
 
 const CardsContainer = () => {
   const favoriteSearchIds = useSelector(
@@ -15,22 +16,24 @@ const CardsContainer = () => {
 
   const loading = useSelector((state) => state.favorites.loading);
 
-  const createCard = (searchObj) => {
-    return <SearchCard searchObj={searchObj} />;
-  };
+  const createCard = (searchObj, idx) => (
+    <SearchCard key={`Card${idx}`} searchObj={searchObj} />
+  );
 
-  return favoriteSearchIds.map((searchId) => {
-    return (
+  return (
+    <div className="favorites__cardsSectionContainer">
       <Suspend
         condition={loading}
-        placeholder={MapPlaceholder}
-        initialDelay={5000}
+        placeholder={SearchCardPlaceholder}
+        initialDelay={1000}
         numberOfPlaceholdersToRender={10}
       >
-        {createCard(favoriteSearches[searchId])}
+        {favoriteSearchIds.map((searchId, idx) =>
+          createCard(favoriteSearches[searchId], idx)
+        )}
       </Suspend>
-    );
-  });
+    </div>
+  );
 };
 
 export default CardsContainer;
