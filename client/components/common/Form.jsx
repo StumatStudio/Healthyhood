@@ -60,31 +60,36 @@ with the form's state by the built in handleSubmit function
 const Form = ({
   doSubmit,
   initialState,
-  classNameString,
-  errorClassNameString,
+  classString,
+  errorClassString,
   propertySchemaObj,
   formSchema,
   validateProperty,
   validateInput,
   children,
+  checkErrorsOnSubmitOnly,
 }) => {
   // Passing an initial state of empty strings prevents changing children
-  // from uncontrolled components to controlled components
+  // from uncontrolled components to controlled components. Each input will have
+  // a name. That name will become a property in the state object and should be
+  // matched in the initial state "schema"
   const [data, setData] = useState(initialState);
   const [errors, setErrors] = useState({});
 
   const handleChange = ({ currentTarget: input }) => {
-    const newErrors = { ...errors };
-    const errorMessage = validateProperty(input, propertySchemaObj); // returns null if no errors
-    if (errorMessage) newErrors[input.name] = errorMessage;
-    else delete newErrors[input.name];
+    if (!checkErrorsOnSubmitOnly) {
+      const newErrors = { ...errors };
+      const errorMessage = validateProperty(input, propertySchemaObj); // returns null if no errors
+      if (errorMessage) newErrors[input.name] = errorMessage;
+      else delete newErrors[input.name];
+      setErrors(newErrors);
+    }
 
     // Update State with new values
     const newData = { ...data };
     newData[input.name] = input.value;
 
     setData(newData);
-    setErrors(newErrors);
   };
 
   const handleSubmit = (eventObj) => {
@@ -100,33 +105,49 @@ const Form = ({
       return;
     }
 
-    // No errors clear to submit via function defined on props
+    // No errors clear to submit via function defined on props and reset form
+    // Runs doSubmit passed in via props. doSubmit should be defined in the
+    // component that renders the form and contain your submittal logic
     doSubmit(data);
     setData(initialState);
     setErrors({});
   };
 
+  // Passes data managed by form as a whole to indiviual input elements as needed
+  // to ensure form works as a unit.
   const addPropsToChildren = (child) => {
     const elementType = child.type.name;
-    if (elementType === 'Input') {
+
+    if (elementType === 'FormInput') {
       return cloneElement(child, {
         onChange: handleChange,
         value: data[child.props.name],
-        errorClassNameString,
+        errorClassString,
+        error: errors[child.props.name],
+      });
+    }
+
+    if (elementType === 'FormSelect') {
+      return cloneElement(child, {
+        onChange: handleChange,
+        value: data[child.props.name],
+        errorClassString,
         error: errors[child.props.name],
       });
     }
 
     if (elementType === 'FormButton') {
-      return cloneElement(child, {
-        isDisabled: validateInput(data, formSchema),
-      });
+      if (!checkErrorsOnSubmitOnly) {
+        return cloneElement(child, {
+          isDisabled: validateInput(data, formSchema),
+        });
+      }
     }
     return child;
   };
 
   return (
-    <form className={classNameString} onSubmit={handleSubmit}>
+    <form className={classString} onSubmit={handleSubmit}>
       {Children.map(children, (child) => addPropsToChildren(child))}
     </form>
   );
@@ -137,4 +158,28 @@ export default Form;
 Form.defaultProps = {
   validateProperty: defaultFunctions.validateProperty,
   validateInput: defaultFunctions.validateInput,
+  classString: '',
+  errorClassString: '',
+  propertySchemaObj: {},
+  formSchema: {},
+  checkErrorsOnSubmitOnly: true,
+};
+
+Form.propTypes = {
+  doSubmit: PropTypes.func.isRequired,
+  initialState: PropTypes.object.isRequired,
+  classString: PropTypes.string,
+  errorClassString: PropTypes.string,
+  propertySchemaObj: PropTypes.object,
+  formSchema: PropTypes.object,
+  validateProperty: PropTypes.func,
+  validateInput: PropTypes.func,
+  children: PropTypes.oneOfType([
+    PropTypes.element,
+    PropTypes.elementType,
+    PropTypes.arrayOf(
+      PropTypes.oneOfType([PropTypes.element, PropTypes.elementType])
+    ),
+  ]).isRequired,
+  checkErrorsOnSubmitOnly: PropTypes.bool,
 };
