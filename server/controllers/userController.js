@@ -60,17 +60,17 @@ const register = async (req, res, next) => {
 
     // Check if user already exists
     if (user) {
-      return res.json({ error: 'User already exists' });
+      return res.json({ message: 'User already exists' });
     }
 
     // Validate password
     if (!validatePassword(password)) {
-      return res.status(403).json({ error: 'Invalid password format' });
+      return res.status(403).json({ message: 'Invalid password format' });
     }
 
     // Validate username
     if (!validateEmail(email)) {
-      return res.status(403).json({ error: 'Invalid email format' });
+      return res.status(403).json({ message: 'Invalid email format' });
     }
 
     // Encrypt password
@@ -90,10 +90,7 @@ const register = async (req, res, next) => {
       .cookie('token', token, { httpOnly: true })
       .send({ data: newUser.rows[0] });
   } catch (err) {
-    return next({
-      message: 'Error in userController.register',
-      serverMessage: { err },
-    });
+    return next(err);
   }
 };
 
@@ -105,14 +102,14 @@ const login = async (req, res, next) => {
     const user = await findUserByEmail(email);
 
     if (!user) {
-      return res.status(401).json({ error: 'Incorrect Email or Password' });
+      return res.status(401).json({ message: 'Incorrect Email or Password' });
     }
     // Load hash, compare password
     const hash = user.password;
     const pwMatch = await bcrypt.compare(password, hash);
 
     if (!pwMatch) {
-      return res.status(401).json({ error: 'Incorrect Email or Password' });
+      return res.status(401).json({ message: 'Incorrect Email or Password' });
     }
 
     // generate JWT
@@ -123,10 +120,7 @@ const login = async (req, res, next) => {
 
     return res.cookie('token', token, { httpOnly: true }).send({ email }); // maybe favorites
   } catch (err) {
-    return next({
-      message: 'Error in userController.login',
-      serverMessage: { err },
-    });
+    return next(err);
   }
 };
 
