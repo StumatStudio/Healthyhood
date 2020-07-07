@@ -7,12 +7,17 @@ import BackgroundAnimation from './components/BackgroundAnimation/BackgroundAnim
 
 const App = () => (
   <>
-    <LoadScript googleMapsApiKey={process.env.GMAPS_KEY} libraries={['places']}>
-      <NavBar />
-      <ComponentsRouting />
-    </LoadScript>
-    <Footer />
-    <BackgroundAnimation />
+    <div className="app__background">
+      <LoadScript
+        googleMapsApiKey={process.env.GMAPS_KEY}
+        libraries={['places']}
+      >
+        <NavBar />
+        <ComponentsRouting />
+      </LoadScript>
+      <Footer />
+      <BackgroundAnimation />
+    </div>
   </>
 );
 

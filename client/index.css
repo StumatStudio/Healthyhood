@@ -2,8 +2,16 @@ body {
   /*font-family: 'Roboto Mono', monospace;*/
   /*font-family: 'DM Mono', monospace;*/
   font-family: 'Sintony', sans-serif;
-  background: linear-gradient(90deg, #FFDFDF 0%, #CDECFF 100%); 
+  background: linear-gradient(90deg, #ffdfdf 0%, #cdecff 100%);
   /*background: black*/
+}
+
+.app__background {
+  min-height: 100vh;
+  background-image: url('./images/background/cityFieldBackground.jpg');
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
 }
 
 .row {
@@ -65,11 +73,14 @@ body {
   margin: 10px 0px;
 }
 
-.yelpscoredetail, .walkscoredetail, .iqairscoredetail {
+.yelpscoredetail,
+.walkscoredetail,
+.iqairscoredetail {
   margin: 0px 30px;
 }
 
-.yelpscoredetail, .iqairscoredetail {
+.yelpscoredetail,
+.iqairscoredetail {
   padding-top: 20px;
 }
 
