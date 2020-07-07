@@ -31,10 +31,10 @@ const validateEmail = (email) => {
 };
 
 const validatePassword = (password) => {
-  // Password must be between 4 and 8 digits long and include at least one numeric digit
+  // Password must be between 4 and 10 digits long and include at least one numeric digit
   // Regex from: http://regexlib.com/REDetails.aspx?regexp_id=30
   // If you want to modify this regex, make sure the front end matches
-  const regex = /^(?=.*\d).{4,8}$/;
+  const regex = /^(?=.*\d).{4,10}$/;
   if (password.match(regex)) return true;
   return false;
 };

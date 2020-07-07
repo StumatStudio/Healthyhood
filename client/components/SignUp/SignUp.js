@@ -85,9 +85,13 @@ const SignUp = ({
     } else if (current.length < 5) {
       errorsList.push('Email must be 5 or more characters');
     }
-    // if (current.length > 20) {
-    //   errorsList.push('Email cannot be more than 20 characters');
-    // }
+
+    // Regex for email validation from: https://stackoverflow.com/a/46181/2040509
+    // If you want to modify this regex, make sure the back end matches
+    const regex = /^(([^<>()[\].,;:\s@"]+(\.[^<>()[\].,;:\s@"]+)*)|(".+"))@(([^<>()[\].,;:\s@"]+\.)+[^<>()[\].,;:\s@"]{2,})$/i;
+    if (!current.match(regex)) {
+      errorsList.push('Email format is incorrect');
+    }
 
     updateErrors({
       ...errors,
@@ -104,12 +108,18 @@ const SignUp = ({
 
     if (current.length === 0) {
       errorsList.push('Password is required');
-    } else if (current.length < 8) {
-      errorsList.push('Password must be 8 or more characters');
+    } else if (current.length < 4) {
+      errorsList.push('Password must be between 4 and 10 characters');
+    } else if (current.length > 10) {
+      errorsList.push('Password must be between 4 and 10 characters');
     }
-    // if (current.length > 10) {
-    //   errorsList.push('Password cannot be more than 10 characters');
-    // }
+    // Password must include at least one numeric digit
+    // Regex from: http://regexlib.com/REDetails.aspx?regexp_id=30
+    // If you want to modify this regex, make sure the back end matches
+    const regex = /^(?=.*\d)/;
+    if (!current.match(regex)) {
+      errorsList.push('Password must have at least one number');
+    }
 
     updateErrors({
       ...errors,
@@ -120,7 +130,7 @@ const SignUp = ({
   };
 
   const onSignUpSubmission = () => {
-    let errorsCount =
+    const errorsCount =
       errors.username.length + errors.email.length + errors.password.length;
     if (errorsCount > 0) {
       displayer('#usernameErrors', listifyArray(errors.username));
