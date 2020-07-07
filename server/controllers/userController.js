@@ -53,24 +53,24 @@ const validatePassword = (password) => {
 // -- Otherwise the data key will contain the user info that was added to the db
 // -- JWT will contain the user email in the payload
 
-const register = async (req, res) => {
+const register = async (req, res, next) => {
   try {
     const { email, password } = req.body;
-    const findUser = await findUserByEmail(email);
+    const user = await findUserByEmail(email);
 
     // Check if user already exists
-    if (findUser) {
-      return res.json({ error: 'User already exists' });
+    if (user) {
+      return res.json({ message: 'User already exists' });
     }
 
     // Validate password
     if (!validatePassword(password)) {
-      return res.json({ error: 'Invalid password format' });
+      return res.status(403).json({ message: 'Invalid password format' });
     }
 
     // Validate username
     if (!validateEmail(email)) {
-      return res.json({ error: 'Invalid email format' });
+      return res.status(403).json({ message: 'Invalid email format' });
     }
 
     // Encrypt password
@@ -89,11 +89,38 @@ const register = async (req, res) => {
     return res
       .cookie('token', token, { httpOnly: true })
       .send({ data: newUser.rows[0] });
-  } catch (error) {
-    // DB returned a error
-    // We might not want to pass the error directly to the front end...
-    // ...anybody have any other ideas how to handle this?
-    return res.json({ error });
+  } catch (err) {
+    return next(err);
+  }
+};
+
+const login = async (req, res, next) => {
+  try {
+    const { email, password } = req.body;
+
+    // check if user exists
+    const user = await findUserByEmail(email);
+
+    if (!user) {
+      return res.status(401).json({ message: 'Incorrect Email or Password' });
+    }
+    // Load hash, compare password
+    const hash = user.password;
+    const pwMatch = await bcrypt.compare(password, hash);
+
+    if (!pwMatch) {
+      return res.status(401).json({ message: 'Incorrect Email or Password' });
+    }
+
+    // generate JWT
+    const payload = { email };
+    const token = jwt.sign(payload, process.env.JWTSECRET, {
+      expiresIn: '1h',
+    });
+
+    return res.cookie('token', token, { httpOnly: true }).send({ email }); // maybe favorites
+  } catch (err) {
+    return next(err);
   }
 };
 
@@ -103,4 +130,5 @@ const register = async (req, res) => {
 
 module.exports = {
   register,
+  login,
 };
