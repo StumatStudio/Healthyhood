@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import { connect } from 'react-redux';
 import {
-  setUsername,
   setEmail,
   setPassword,
   updateUser,
@@ -12,8 +11,7 @@ import {
 import './SignUp.css';
 
 const SignUp = ({
-  user: { username, email, password },
-  setUsername,
+  user: { email, password },
   setEmail,
   setPassword,
   updateUser,
@@ -51,30 +49,30 @@ const SignUp = ({
     return listify;
   };
 
-  const onUsernameChange = (event) => {
-    displayer('#usernameErrors', ''); //clear the #usernameErrors div when typing
-    const current = event.target.value;
-    const errorsList = [];
+  // const onUsernameChange = (event) => {
+  //   displayer('#usernameErrors', ''); //clear the #usernameErrors div when typing
+  //   const current = event.target.value;
+  //   const errorsList = [];
 
-    if (current.length === 0) {
-      errorsList.push('Username is required');
-    } else if (current.length < 4) {
-      errorsList.push('Username must be 4 or more characters');
-    }
-    if (Number(current[0]) == current[0]) {
-      errorsList.push('Username cannot start with a number');
-    }
-    if (current.length > 10) {
-      errorsList.push('Username cannot be more than 10 characters');
-    }
+  //   if (current.length === 0) {
+  //     errorsList.push('Username is required');
+  //   } else if (current.length < 4) {
+  //     errorsList.push('Username must be 4 or more characters');
+  //   }
+  //   if (Number(current[0]) == current[0]) {
+  //     errorsList.push('Username cannot start with a number');
+  //   }
+  //   if (current.length > 10) {
+  //     errorsList.push('Username cannot be more than 10 characters');
+  //   }
 
-    updateErrors({
-      ...errors,
-      username: errorsList,
-    });
+  //   updateErrors({
+  //     ...errors,
+  //     username: errorsList,
+  //   });
 
-    setUsername(current);
-  };
+  //   setUsername(current);
+  // };
 
   const onEmailChange = (event) => {
     displayer('#emailErrors', ''); //clear the #emailErrors div when typing
@@ -131,10 +129,8 @@ const SignUp = ({
   };
 
   const onSignUpSubmission = async () => {
-    const errorsCount =
-      errors.username.length + errors.email.length + errors.password.length;
+    const errorsCount = errors.email.length + errors.password.length;
     if (errorsCount > 0) {
-      displayer('#usernameErrors', listifyArray(errors.username));
       displayer('#emailErrors', listifyArray(errors.email));
       displayer('#passwordErrors', listifyArray(errors.password));
     }
@@ -168,7 +164,6 @@ const SignUp = ({
         // update state with User info
 
         updateUser({
-          username,
           email,
           joinedon: new Date().toDateString(),
         });
@@ -183,23 +178,11 @@ const SignUp = ({
     <main className="measure black-80 mv6 center shadow-4 pa5">
       <fieldset id="sign_up" className="ba b--transparent ph0 mh0">
         {error && <div className="errors">{error}</div>}
-        <div className="errors" id="usernameErrors" />
         <div className="errors" id="emailErrors" />
         <div className="errors" id="passwordErrors" />
 
         <legend className="ph0 mh0 fw6 f4">Sign Up</legend>
-        <div className="mt3">
-          <label className="db fw4 lh-copy f6">
-            Username
-            <input
-              className="pa2 w-100 hover-black input-reset hover-bg-white ba bg-transparent f7"
-              type="text"
-              name="name"
-              id="name"
-              onChange={onUsernameChange}
-            />
-          </label>
-        </div>
+
         <div className="mt3">
           <label className="db fw4 lh-copy f6" htmlFor="email-address">
             Email Address
@@ -250,7 +233,6 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = {
-  setUsername,
   setEmail,
   setPassword,
   updateUser,

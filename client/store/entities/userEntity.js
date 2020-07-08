@@ -9,19 +9,16 @@ const tokenKey = 'token';
 const initialState = {
   isLoading: false, // Can trigger loading indicator based on flag
   lastFetch: null, // We can timestamp here to run comparisons for caching
-  username: '',
   email: '',
   password: '',
   isLoggedIn: false,
   defaultToSignUp: true,
   user: {
-    username: '',
     email: '',
     password: '',
     joinedon: '',
   },
   errors: {
-    username: ['Username is required'],
     email: ['Email is required'],
     password: ['Password is required'],
   },
@@ -37,7 +34,6 @@ const USERS_REQUEST = 'usersRequest';
 const USERS_REQUEST_FAILED = 'usersRequestFailed';
 const RECEIVED_USER = 'receivedUser';
 const SET_IS_LOGGED_IN = 'setIsLoggedIn';
-const SET_USERNAME = 'setUsername';
 const SET_EMAIL = 'setEmail';
 const SET_PASSWORD = 'setPassword';
 const UPDATE_USER = 'updateUser';
@@ -63,7 +59,6 @@ export const usersRequest = createAction(USERS_REQUEST); // no payload needed
 export const usersRequestFailed = createAction(USERS_REQUEST_FAILED); // no payload needed
 export const receivedUser = createAction(USERS_REQUEST_FAILED); // needs userObj as payload
 export const setIsLoggedIn = createAction(SET_IS_LOGGED_IN);
-export const setUsername = createAction(SET_USERNAME);
 export const setEmail = createAction(SET_EMAIL);
 export const setPassword = createAction(SET_PASSWORD);
 export const updateUser = createAction(UPDATE_USER);
@@ -82,7 +77,6 @@ const usersReducer = createReducer(initialState, {
   [USERS_REQUEST_FAILED]: usersRequestFailedCase,
   [RECEIVED_USER]: receivedUserCase,
   [SET_IS_LOGGED_IN]: setIsLoggedInCase,
-  [SET_USERNAME]: setUsernameCase,
   [SET_EMAIL]: setEmailCase,
   [SET_PASSWORD]: setPasswordCase,
   [UPDATE_USER]: updateUserCase,
@@ -111,10 +105,6 @@ function setIsLoggedInCase(state, action) {
   state.isLoggedIn = action.payload;
 }
 
-function setUsernameCase(state, action) {
-  state.username = action.payload;
-}
-
 function setEmailCase(state, action) {
   state.email = action.payload;
 }
@@ -125,7 +115,6 @@ function setPasswordCase(state, action) {
 
 function updateUserCase(state, action) {
   const resetUser = {
-    username: '',
     email: '',
     password: '',
     joinedon: '',
