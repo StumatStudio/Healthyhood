@@ -1,6 +1,8 @@
 body {
   /*font-family: 'Roboto Mono', monospace;*/
   /*font-family: 'DM Mono', monospace;*/
+  height: 100%;
+  width: 100%;
   font-family: 'Sintony', sans-serif;
   background: linear-gradient(90deg, #ffdfdf 0%, #cdecff 100%);
   /*background: black*/

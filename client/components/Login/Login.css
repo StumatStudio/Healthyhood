@@ -1,0 +1,14 @@
+.login__componentContainer {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.login__formContainer {
+  border: 1px solid black;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 50%;
+  background-color: rgba(0, 1, 1, 0.25);
+}
