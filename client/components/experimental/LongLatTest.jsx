@@ -3,8 +3,6 @@ import { connect } from 'react-redux';
 import GooglePlacesAutoComplete from 'react-google-places-autocomplete';
 import { geocodeByPlaceId, getLatLng } from 'react-google-places-autocomplete';
 
-import Form from '../common/Form';
-import * as apiActions from '../../store/entities/apiActions';
 import {
   getYelpData,
   updateUserLocation,
@@ -30,7 +28,7 @@ class LongLatTest extends Component {
     },
   };
 
-  handleGoogleAutocompleteSelect = async result => {
+  handleGoogleAutocompleteSelect = async (result) => {
     const { place_id } = result;
     const place = await geocodeByPlaceId(place_id);
     const latLng = await getLatLng(place[0]);
@@ -90,7 +88,7 @@ class LongLatTest extends Component {
     );
   };
 
-  displayWalkScore = walkData => {
+  displayWalkScore = (walkData) => {
     return (
       <img
         className="giveMeData"
@@ -100,7 +98,7 @@ class LongLatTest extends Component {
     );
   };
 
-  displayIqAirScore = iqAirData => {
+  displayIqAirScore = (iqAirData) => {
     return (
       <div className="iqAirScore">
         <img
@@ -171,16 +169,16 @@ class LongLatTest extends Component {
   }
 }
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state) => ({
   map: state.map,
 });
 
-const mapDispatchToProps = dispatch => ({
-  updateUserLocation: latLongObj => dispatch(updateUserLocation(latLongObj)),
-  getYelpData: latLongObj => dispatch(getYelpData(latLongObj)),
-  getWalkData: latLongObj => dispatch(getWalkData(latLongObj)),
-  getIqAirData: latLongObj => dispatch(getIqAirData(latLongObj)),
-  getHealthScore: secretSauceObj => dispatch(getHealthScore(secretSauceObj)),
+const mapDispatchToProps = (dispatch) => ({
+  updateUserLocation: (latLongObj) => dispatch(updateUserLocation(latLongObj)),
+  getYelpData: (latLongObj) => dispatch(getYelpData(latLongObj)),
+  getWalkData: (latLongObj) => dispatch(getWalkData(latLongObj)),
+  getIqAirData: (latLongObj) => dispatch(getIqAirData(latLongObj)),
+  getHealthScore: (secretSauceObj) => dispatch(getHealthScore(secretSauceObj)),
   toggleInitialLoad: () => dispatch(toggleInitialLoad()),
 });
 

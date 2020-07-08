@@ -17,7 +17,7 @@ import PropTypes from 'prop-types';
 const Suspend = ({
   condition,
   placeholder: Placeholder,
-  placeholdersToRender,
+  numberOfPlaceholdersToRender,
   initialDelay,
   checkOnce,
   children,
@@ -28,7 +28,7 @@ const Suspend = ({
   // Computes Placeholder Array to render
   const createArayOfPlaceholderElements = () => {
     const placeholderArray = [];
-    for (let i = 0; i < placeholdersToRender; i += 1) {
+    for (let i = 0; i < numberOfPlaceholdersToRender; i += 1) {
       placeholderArray.push(<Placeholder key={i} />);
     }
     return placeholderArray;
@@ -38,7 +38,7 @@ const Suspend = ({
     // skips the rest if this component wraps data that needs only load once
     if (checkOnce && isChecked) {
       setComponent([children]);
-      return;
+      return undefined;
     }
 
     let delayedTimeout = null;
@@ -79,7 +79,7 @@ const Suspend = ({
 export default Suspend;
 
 Suspend.defaultProps = {
-  placeholdersToRender: 1,
+  numberOfPlaceholdersToRender: 1,
   initialDelay: 0,
   checkOnce: false,
 };
@@ -87,7 +87,7 @@ Suspend.defaultProps = {
 Suspend.propTypes = {
   condition: PropTypes.bool.isRequired,
   placeholder: PropTypes.elementType.isRequired,
-  placeholdersToRender: PropTypes.number,
+  numberOfPlaceholdersToRender: PropTypes.number,
   initialDelay: PropTypes.number,
   checkOnce: PropTypes.bool,
   children: PropTypes.oneOfType([
