@@ -9,6 +9,6 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-
   width: 50%;
+  background-color: rgba(0, 1, 1, 0.25);
 }
