@@ -1,7 +1,7 @@
 import React from 'react';
 import { Route, Switch, Redirect } from 'react-router-dom';
 import SignUp from '../SignUp/SignUp';
-import Login from '../Login/Login';
+import Login from '../Login/Login2';
 import Home from '../Home/Home';
 import Favorites from '../Favorites/Favorites';
 import Notfound from '../NotFound/NotFound';

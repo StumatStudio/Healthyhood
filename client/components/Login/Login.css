@@ -6,9 +6,11 @@
 
 .login__formContainer {
   border: 1px solid black;
+  border-radius: 2px;
   display: flex;
   flex-direction: column;
   align-items: center;
   width: 50%;
-  background-color: rgba(0, 1, 1, 0.25);
+  background-color: rgb(43, 226, 226, 0.4);
+  /* background-color: rgba(0, 1, 1, 0.25); */
 }

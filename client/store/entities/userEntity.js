@@ -147,7 +147,7 @@ Confusing, but solid practice and implacations extend beyond fetch requests.
 
 const { apiCallRequested } = apiActions;
 const usersUrl = '/whateverTheBackendNeeds';
-const loginUrl = '/whateverTheBackendNeeds';
+const loginUrl = '/user/login';
 
 // Returns function that, when called creates an API action object with the following payload
 export const login = (loginObj) =>

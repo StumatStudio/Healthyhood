@@ -23,6 +23,7 @@
   border: 1px solid black;
   border-radius: 2px;
   box-shadow: -5px 5px 2px gray;
+  background-color: rgb(43, 226, 226, 0.4);
 }
 
 .favorites__searchCardContainer {
@@ -55,4 +56,5 @@
   width: 50%;
   margin-top: 20px;
   overflow: hidden;
+  background-color: rgb(230, 245, 16, 0.7);
 }

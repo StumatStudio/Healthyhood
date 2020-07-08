@@ -1,15 +1,17 @@
 import React from 'react';
-import { NavLink } from 'react-router-dom';
 import Joi from '@hapi/joi';
+import { useDispatch } from 'react-redux';
 import Form from '../common/Form';
 import FormInput from '../common/FormInput';
 import FormButton from '../common/FormButton';
+import { login } from '../../store/entities/userEntity';
 import './Login.css';
 
 const Login = () => {
+  const dispatch = useDispatch();
   // Set up data and structure
   const inputFields = {
-    userName: 'userName',
+    userName: 'email',
     password: 'password',
     remember: 'remember',
   };
@@ -26,10 +28,16 @@ const Login = () => {
     [inputFields.remember]: Joi.any(),
   };
 
+  const loginUser = (data) => {
+    dispatch(login(data));
+  };
+
   const joiSchema = Joi.object(schema);
 
   const doSubmit = (data) => {
     console.log('submitting', data);
+    const user = loginUser(data);
+    console.log('user', user);
   };
 
   return (
@@ -42,7 +50,7 @@ const Login = () => {
           doSubmit={doSubmit}
           checkErrorsOnSubmitOnly={false}
         >
-          <FormInput name={inputFields.userName} label="Username" />
+          <FormInput name={inputFields.userName} label="Email:" />
           <FormInput
             name={inputFields.password}
             label="Password"

@@ -23,7 +23,7 @@ the next middle/reducer to be called, AND the action that was dispached
 */
 
 // Get state also available along with dispatch in destructured argument
-const apiCall = ({ dispatch }) => next => async action => {
+const apiCall = ({ dispatch }) => (next) => async (action) => {
   // Call next middleware / reducer if not an api action
   if (action.type !== apiActions.apiCallRequested.type) return next(action);
 
@@ -74,7 +74,7 @@ const apiCall = ({ dispatch }) => next => async action => {
   } catch (err) {
     // For Dev tools / displaying error to client
     dispatch(apiCallFailed(err.response.data)); // This syntax is axios specific
-
+    dispatch({ type: 'error', payload: err.response.data });
     // To notify slice if onError specified
     if (onError) {
       dispatch({

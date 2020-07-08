@@ -13,7 +13,7 @@ import Login2 from '../Login/Login2';
  */
 
 const SignUpOrLogin = ({ defaultToSignUp }) => (
-  <>{false ? <Login /> : <Login2 />}</>
+  <>{false ? <SignUp /> : <Login2 />}</>
 );
 
 const mapStateToProps = ({ users: { defaultToSignUp } }) => ({
