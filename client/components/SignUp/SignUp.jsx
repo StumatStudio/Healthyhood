@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import { connect } from 'react-redux';
 import {
@@ -21,6 +21,7 @@ const SignUp = ({
   setIsLoggedIn,
   errors,
 }) => {
+  const [error, setError] = useState('');
   /*
   displayer takes two required arguments as inputs:
   1) a message string, and
@@ -129,7 +130,7 @@ const SignUp = ({
     setPassword(current);
   };
 
-  const onSignUpSubmission = () => {
+  const onSignUpSubmission = async () => {
     const errorsCount =
       errors.username.length + errors.email.length + errors.password.length;
     if (errorsCount > 0) {
@@ -138,36 +139,66 @@ const SignUp = ({
       displayer('#passwordErrors', listifyArray(errors.password));
     }
 
-    updateUser({
-      username,
-      email,
-      password,
-      joinedon: new Date().toDateString(),
-    });
+    if (errorsCount === 0) {
+      //make a post request to register endpoint
+      const userData = {
+        email,
+        password,
+      };
 
-    //switches page to UserSection component when isLoggedIn is set to true
-    if (errorsCount === 0) setIsLoggedIn(true);
+      const response = await fetch('/api/user/register', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          // 'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: JSON.stringify(userData),
+      });
+      const parsedResponse = await response.json();
+
+      //server responded with an error
+      if (parsedResponse.hasOwnProperty('message')) {
+        setError(parsedResponse.message);
+      }
+      //server did not find any error and was able to add the user
+
+      if (parsedResponse.hasOwnProperty('data')) {
+        setError('');
+        //if successful, do below:
+        // update state with User info
+
+        updateUser({
+          username,
+          email,
+          joinedon: new Date().toDateString(),
+        });
+
+        //switches page to UserSection component when isLoggedIn is set to true
+        setIsLoggedIn(true);
+      }
+    }
   };
 
   return (
     <main className="measure black-80 mv6 center shadow-4 pa5">
       <fieldset id="sign_up" className="ba b--transparent ph0 mh0">
-        <div className="errors" id="usernameErrors"></div>
-        <div className="errors" id="emailErrors"></div>
-        <div className="errors" id="passwordErrors"></div>
+        {error && <div className="errors">{error}</div>}
+        <div className="errors" id="usernameErrors" />
+        <div className="errors" id="emailErrors" />
+        <div className="errors" id="passwordErrors" />
 
         <legend className="ph0 mh0 fw6 f4">Sign Up</legend>
         <div className="mt3">
-          <label className="db fw4 lh-copy f6" htmlFor="name">
+          <label className="db fw4 lh-copy f6">
             Username
+            <input
+              className="pa2 w-100 hover-black input-reset hover-bg-white ba bg-transparent f7"
+              type="text"
+              name="name"
+              id="name"
+              onChange={onUsernameChange}
+            />
           </label>
-          <input
-            className="pa2 w-100 hover-black input-reset hover-bg-white ba bg-transparent f7"
-            type="text"
-            name="name"
-            id="name"
-            onChange={onUsernameChange}
-          />
         </div>
         <div className="mt3">
           <label className="db fw4 lh-copy f6" htmlFor="email-address">

@@ -55,6 +55,7 @@ const validatePassword = (password) => {
 
 const register = async (req, res, next) => {
   try {
+    console.log(req.body);
     const { email, password } = req.body;
     const user = await findUserByEmail(email);
 
