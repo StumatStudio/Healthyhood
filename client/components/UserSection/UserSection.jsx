@@ -4,6 +4,7 @@ import LongLatTest from '../experimental/LongLatTest';
 import NewerMapContainer from '../experimental/NewerMapContainer';
 import Suspend from '../common/Suspend';
 import MapPlaceholder from '../common/experimental/MapPlaceholder/MapPlaceholder';
+// import DisplayUser from './DisplayUser';
 
 const UserSection = () => {
   const map = useSelector((state) => state.map);
