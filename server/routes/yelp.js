@@ -12,7 +12,7 @@ const router = express.Router();
 router.get('/business/search', yelpController.businessSearch, (req, res) => {
   // Upon success, res.locals.business will contain an array of businesses
   // returned by the Yelp Business Search API
-  console.log('router.get /business/search', res.locals.business);
+  console.log('yelp router.get /business/search', res.locals.business);
 
   // Currently sending the entire blob of data. We should review and consider
   // pruning only to the data we need.
@@ -26,7 +26,7 @@ router.get('/business/search', yelpController.businessSearch, (req, res) => {
 router.get('/business/details', yelpController.businessDetails, (req, res) => {
   // Upon success, res.locals.businessdetails will contain the business details
   // returned by the Yelp Business Details API
-  console.log('router.get /business/details', res.locals.businessdetails);
+  console.log('yelp router.get /business/details', res.locals.businessdetails);
 
   // Currently sending the entire blob of data. We should review and consider
   // pruning only to the data we need.
@@ -44,7 +44,7 @@ router.get('/business/details', yelpController.businessDetails, (req, res) => {
 router.get('/business/match', yelpController.businessMatch, (req, res) => {
   // Upon success, res.locals.business will contain a list of businesses
   // returned by the Yelp Business Match API
-  console.log('router.get /business/match', res.locals.business);
+  console.log('yelp router.get /business/match', res.locals.business);
 
   // Currently sending the entire blob of data. We should review and consider
   // pruning only to the data we need.

@@ -10,19 +10,19 @@ const router = express.Router();
 router.get('/', userController.getAllUsers, (req, res) => {
   // on success, res.locals.users will contain the list of users
   // retrieved from the DB
-  console.log('router.get / users', res.locals.users);
+  console.log('users router.get /', res.locals.users);
   res.sendStatus(200);
 });
 
 router.post('/login', userController.verifyUser, (req, res) => {
   // on success, res.locals.user will contain the logged-in user
-  console.log('router.post /login user', res.locals.user);
+  console.log('users router.post /login', res.locals.user);
   res.sendStatus(200);
 });
 
 router.post('/signup', userController.createUser, (req, res) => {
   // on success, res.locals.user will contain the newly created user
-  console.log('router.post /signup user', res.locals.user);
+  console.log('users router.post /signup', res.locals.user);
   res.sendStatus(200);
 });
 
